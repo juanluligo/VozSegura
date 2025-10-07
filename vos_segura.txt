@@ -1,0 +1,461 @@
+-- Nombre del Proyecto / APP
+-- VozSegura
+
+-- Autores 
+-- Juan Camilo Luligo
+-- Juan Esteban Ceballos
+-- Eduardo Galvis
+-- Danilo Oviedo
+-- Andrez Felipe Montenegro Males 
+
+-----------------------------------      
+-- -----------  DDL  ----------- --      
+-----------------------------------      
+
+create database vozsegura;
+use vozsegura;
+
+-- 1. Usuarios (solo usuarios normales, registro web)
+CREATE TABLE usuarios (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP,
+    activo BOOLEAN DEFAULT TRUE
+);
+
+-- 2. Administradores (solo admins, creados manualmente)
+CREATE TABLE administradores (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP,
+    activo BOOLEAN DEFAULT TRUE
+);
+
+-- 3. Instituciones
+CREATE TABLE instituciones (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(200) NOT NULL,
+    ciudad VARCHAR(100) NOT NULL
+);
+
+-- 4. Facultades
+CREATE TABLE facultades (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(200) NOT NULL,
+    institucion_id INT NOT NULL,
+    activa BOOLEAN DEFAULT TRUE,
+    FOREIGN KEY (institucion_id) REFERENCES instituciones(id)
+);
+
+-- 5. Denuncias
+CREATE TABLE denuncias (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    codigo VARCHAR(20) UNIQUE NOT NULL,
+    tipo VARCHAR(50) NOT NULL,
+    descripcion TEXT NOT NULL,
+    fecha DATE NOT NULL,
+    estado VARCHAR(30) DEFAULT 'recibida',
+    gravedad VARCHAR(20) DEFAULT 'media',
+    usuario_id INT NOT NULL,
+    facultad_id INT NOT NULL,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
+    FOREIGN KEY (facultad_id) REFERENCES facultades(id)
+);
+
+-- 6. Recursos de ayuda
+CREATE TABLE recursos (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    titulo VARCHAR(100) NOT NULL,
+    descripcion TEXT,
+    url VARCHAR(255)
+);
+
+-- 7. Relación denuncia <-> recurso (muchos a muchos)
+CREATE TABLE denuncia_recurso (
+    denuncia_id INT NOT NULL,
+    recurso_id INT NOT NULL,
+    PRIMARY KEY (denuncia_id, recurso_id),
+    FOREIGN KEY (denuncia_id) REFERENCES denuncias(id),
+    FOREIGN KEY (recurso_id) REFERENCES recursos(id)
+);
+
+-- 8. Archivos adjuntos a denuncias (Evidencia)
+CREATE TABLE archivos (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    denuncia_id INT NOT NULL,
+    nombre VARCHAR(255) NOT NULL,
+    tipo VARCHAR(20) NOT NULL,
+    ruta VARCHAR(255) NOT NULL,
+    fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (denuncia_id) REFERENCES denuncias(id)
+);
+
+-- 9. Seguimiento de denuncia (historial de acciones por admins)
+CREATE TABLE seguimiento_denuncia (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    denuncia_id INT NOT NULL,
+    admin_id INT NOT NULL,
+    accion VARCHAR(100) NOT NULL,       -- ej: "Cambio de estado", "Asignación", "Comentario"
+    comentario TEXT,
+    estado_actual VARCHAR(30),
+    fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (denuncia_id) REFERENCES denuncias(id),
+    FOREIGN KEY (admin_id) REFERENCES administradores(id)
+);
+
+-- 10. Atenciones (registro de sesiones de atención, presencial/virtual)
+CREATE TABLE atenciones (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    denuncia_id INT NOT NULL,
+    usuario_id INT NOT NULL,
+    admin_id INT NOT NULL,
+    tipo_atencion VARCHAR(50),          -- ej: "psicológica", "legal", "social"
+    fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
+    descripcion TEXT,
+    FOREIGN KEY (denuncia_id) REFERENCES denuncias(id),
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
+    FOREIGN KEY (admin_id) REFERENCES administradores(id)
+);
+
+-- 11. Log de acciones generales del sistema
+CREATE TABLE log_accion (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    usuario_id INT,
+    admin_id INT,
+    accion VARCHAR(100) NOT NULL,
+    fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
+    descripcion TEXT,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
+    FOREIGN KEY (admin_id) REFERENCES administradores(id)
+);
+
+-- 12. Orientaciones (mensajes enviados a usuarios, útiles para chat de ayuda)
+CREATE TABLE orientacion (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    usuario_id INT NOT NULL,
+    mensaje TEXT NOT NULL,
+    fecha_envio DATETIME DEFAULT CURRENT_TIMESTAMP,
+    estado VARCHAR(50),                 -- leída, pendiente, etc.
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+);
+
+
+-----------------------------------      
+-- -----------  DML  ----------- --      
+-----------------------------------      
+
+-- instituciones
+INSERT INTO instituciones (nombre, ciudad) VALUES
+('universidad del cauca', 'popayan'),
+('universidad antonio narino', 'popayan'),
+('universidad cooperativa de colombia', 'popayan'),
+('universidad nacional abierta y a distancia', 'popayan'),
+('fundacion universitaria de popayan', 'popayan'),
+('universidad autonoma del cauca', 'popayan'),
+('universidad autonoma de occidente', 'cali'),
+('universidad del valle', 'cali'),
+('universidad icesi', 'cali'),
+('universidad santiago de cali', 'cali');
+
+-- facultades
+INSERT INTO facultades (nombre, institucion_id, activa) VALUES
+('ingenieria sistemas', 1, TRUE),
+('derecho y sociedad', 1, TRUE),
+('psicologia humana', 2, TRUE),
+('educacion basica', 2, TRUE),
+('ciencias naturales', 3, TRUE),
+('medicina y salud', 4, TRUE),
+('artes visuales', 5, TRUE),
+('economia y finanzas', 6, TRUE),
+('administracion empresas', 7, TRUE),
+('matematicas aplicadas', 8, TRUE);
+
+-- usuarios
+INSERT INTO usuarios (nombre, email, password) VALUES
+('alejandro rojas', 'alejandro.rojas@universidaddelcauca.edu.co', 'alejito123'),
+('mariana sanchez', 'mariana.sanchez@universidaddelcauca.edu.co', 'sanmar2024'),
+('raul hernandez', 'raul.hernandez@antonionarino.edu.co', 'hernandez1'),
+('lina castro', 'lina.castro@antonionarino.edu.co', 'castro456'),
+('daniel perez', 'daniel.perez@cooperativadecolombia.edu.co', 'dani.92'),
+('isabel gomez', 'isabel.gomez@unad.edu.co', 'isa!gomezz'),
+('sebastian lopez', 'sebastian.lopez@fundacionuniversitariapopayan.edu.co', 'sebasl0p'),
+('carla torres', 'carla.torres@autonomadelcauca.edu.co', 'torrescarla'),
+('felipe martinez', 'felipe.martinez@delvalle.edu.co', 'martinezf'),
+('lucia garcia', 'lucia.garcia@santiagodecali.edu.co', 'lucia2025');
+
+-- administradores
+INSERT INTO administradores (nombre, email, password) VALUES
+('juan pardo', 'juan.pardo@universidaddelcauca.edu.co', 'juanpardo'),
+('laura jimenez', 'laura.jimenez@universidaddelcauca.edu.co', 'lauraj'),
+('andres arango', 'andres.arango@antonionarino.edu.co', 'andresara'),
+('maria fernandez', 'maria.fernandez@antonionarino.edu.co', 'mariafer'),
+('carlos prieto', 'carlos.prieto@cooperativadecolombia.edu.co', 'cprieto2022'),
+('felipe rubio', 'felipe.rubio@unad.edu.co', 'felirubio'),
+('diana mejia', 'diana.mejia@fundacionuniversitariapopayan.edu.co', 'dianamejia'),
+('camila ospina', 'camila.ospina@autonomadelcauca.edu.co', 'cospina12'),
+('jorge valencia', 'jorge.valencia@delvalle.edu.co', 'jorgeval'),
+('paula ruiz', 'paula.ruiz@santiagodecali.edu.co', 'paularuiz');
+
+-- recursos
+INSERT INTO recursos (titulo, descripcion, url) VALUES
+('guia psicologica', 'ayuda para casos de ansiedad', 'https://vozsegura.com/psicologia'),
+('contacto legal', 'asesoria juridica sin costo', 'https://vozsegura.com/legal'),
+('manual denuncia', 'pasos para denunciar', 'https://vozsegura.com/manual'),
+('red apoyo', 'grupos de ayuda estudiantes', 'https://vozsegura.com/apoyo'),
+('guia derechos', 'informacion sobre tus derechos', 'https://vozsegura.com/derechos'),
+('lineas emergencia', 'telefonos de emergencia', 'https://vozsegura.com/emergencia'),
+('apoyo social', 'trabajadores sociales disponibles', 'https://vozsegura.com/social'),
+('faq legal', 'preguntas legales frecuentes', 'https://vozsegura.com/faqlegal'),
+('guia pruebas', 'como subir pruebas', 'https://vozsegura.com/pruebas'),
+('proceso institucional', 'como actua la institucion', 'https://vozsegura.com/institucion');
+
+-- denuncias
+INSERT INTO denuncias (codigo, tipo, descripcion, fecha, estado, gravedad, usuario_id, facultad_id) VALUES
+('dnc-101', 'acoso', 'me insultaron en clase y nadie ayudo', '2025-06-11', 'recibida', 'alta', 1, 1),
+('dnc-203', 'violencia', 'me empujaron en el pasillo', '2025-04-19', 'revisando', 'media', 2, 2),
+('dnc-304', 'discriminacion', 'me rechazaron por mi acento', '2025-05-23', 'cerrada', 'alta', 3, 3),
+('dnc-405', 'acoso', 'un profesor hizo comentarios raros', '2025-03-28', 'recibida', 'media', 4, 4),
+('dnc-506', 'violencia', 'pelea en cafeteria', '2025-02-10', 'en proceso', 'baja', 5, 5),
+('dnc-607', 'acoso', 'me enviaron mensajes incomodos', '2025-09-01', 'en espera', 'alta', 6, 6),
+('dnc-708', 'discriminacion', 'no me dejaron entrar por mi ropa', '2025-08-15', 'cerrada', 'media', 7, 7),
+('dnc-809', 'violencia', 'golpearon a mi amigo', '2025-07-17', 'recibida', 'alta', 8, 8),
+('dnc-910', 'acoso', 'me llamaron por telefono y se quedaron callados', '2025-09-05', 'en proceso', 'media', 9, 9),
+('dnc-110', 'violencia', 'me amenazaron afuera de la universidad', '2025-01-30', 'revisando', 'alta', 10, 10);
+
+-- denuncia_recurso
+INSERT INTO denuncia_recurso (denuncia_id, recurso_id) VALUES
+(1, 1), 
+(1, 2), 
+(2, 2), 
+(3, 3), 
+(4, 4), 
+(5, 5), 
+(6, 6), 
+(7, 7), 
+(8, 8), 
+(9, 9);
+
+-- archivos
+INSERT INTO archivos (denuncia_id, nombre, tipo, ruta) VALUES
+(1, 'img_20250611_1.jpg', 'imagen', '/files/img_20250611_1.jpg'),
+(2, 'video_pasillo.mp4', 'video', '/files/video_pasillo.mp4'),
+(3, 'audio_acento.mp3', 'audio', '/files/audio_acento.mp3'),
+(4, 'captura_profesor.png', 'imagen', '/files/captura_profesor.png'),
+(5, 'foto_cafeteria.jpg', 'imagen', '/files/foto_cafeteria.jpg'),
+(6, 'chat_acoso.txt', 'documento', '/files/chat_acoso.txt'),
+(7, 'doc_ropa.pdf', 'documento', '/files/doc_ropa.pdf'),
+(8, 'foto_agresion.jpg', 'imagen', '/files/foto_agresion.jpg'),
+(9, 'video_llamada.mp4', 'video', '/files/video_llamada.mp4'),
+(10, 'img_amenaza.jpg', 'imagen', '/files/img_amenaza.jpg');
+
+-- seguimiento_denuncia
+INSERT INTO seguimiento_denuncia (denuncia_id, admin_id, accion, comentario, estado_actual) VALUES
+(1, 1, 'revisar caso', 'se envia a psicologia', 'revisando'),
+(2, 2, 'contactar denunciante', 'se pidio mas detalles', 'en proceso'),
+(3, 3, 'cerrar caso', 'se resolvio con mediacion', 'cerrada'),
+(4, 4, 'asignar a legal', 'legal revisa documentos', 'revisando'),
+(5, 5, 'pedir evidencia', 'solicitar fotos', 'en proceso'),
+(6, 6, 'poner en espera', 'esperando respuesta', 'en espera'),
+(7, 7, 'cerrar caso', 'motivos explicados', 'cerrada'),
+(8, 8, 'derivar a social', 'trabajo social interviene', 'revisando'),
+(9, 9, 'investigar pruebas', 'verificacion digital', 'en proceso'),
+(10, 10, 'llamar denunciante', 'se inicio atencion', 'revisando');
+
+-- atenciones
+INSERT INTO atenciones (denuncia_id, usuario_id, admin_id, tipo_atencion, descripcion) VALUES
+(1, 1, 1, 'psicologica', 'me llamaron y hablaron conmigo'),
+(2, 2, 2, 'legal', 'me explicaron el proceso'),
+(3, 3, 3, 'psicologica', 'charla grupal'),
+(4, 4, 4, 'legal', 'revisaron los papeles'),
+(5, 5, 5, 'social', 'me acompañaron en la cafeteria'),
+(6, 6, 6, 'psicologica', 'me preguntaron como me sentia'),
+(7, 7, 7, 'legal', 'me dieron asesoramiento'),
+(8, 8, 8, 'social', 'me ayudaron con los contactos'),
+(9, 9, 9, 'psicologica', 'hablamos por telefono'),
+(10, 10, 10, 'legal', 'me ayudaron con pruebas');
+
+-- log_accion
+INSERT INTO log_accion (usuario_id, admin_id, accion, descripcion) VALUES
+(1, NULL, 'nuevo registro', 'alejandro rojas registro una denuncia'),
+(NULL, 1, 'cambio estado', 'juan pardo puso estado revisando'),
+(2, NULL, 'nuevo registro', 'mariana sanchez registro una denuncia'),
+(NULL, 2, 'asignacion caso', 'laura jimenez asigno dnc-203'),
+(3, NULL, 'nuevo registro', 'raul hernandez registro denuncia'),
+(NULL, 3, 'cerrar caso', 'andres arango cerro dnc-304'),
+(4, NULL, 'nuevo registro', 'lina castro registro una denuncia'),
+(NULL, 4, 'cambio estado', 'maria fernandez reviso dnc-405'),
+(5, NULL, 'nuevo registro', 'daniel perez registro denuncia'),
+(NULL, 5, 'solicitar evidencia', 'carlos prieto pidio fotos');
+
+-- orientacion
+INSERT INTO orientacion (usuario_id, mensaje, estado) VALUES
+(1, 'puedes pedir ayuda psicologica gratis', 'leida'),
+(2, 'asesoria legal disponible', 'pendiente'),
+(3, 'guia de derechos estudiantiles', 'leida'),
+(4, 'contacta apoyo social', 'pendiente'),
+(5, 'puedes pedir ayuda institucional', 'leida'),
+(6, 'manual de denuncia segura', 'pendiente'),
+(7, 'consulta con tu facultad', 'leida'),
+(8, 'acompañamiento de orientacion', 'pendiente'),
+(9, 'linea de emergencia disponible', 'leida'),
+(10, 'guia para subir pruebas', 'pendiente');
+
+
+----------------------------------     
+-- ------  SUBCONSULTAS  ------ --      
+----------------------------------      
+
+-- 1.
+-- HU_10: Como administrador, quiero poder generar reportes filtrados sobre las denuncias recibidas y su estado, para analizar estadisticas, identificar patrones y mejorar la gestion institucional.
+
+SELECT estado, COUNT(*) AS total
+FROM denuncias
+WHERE facultad_id IN (
+    SELECT id FROM facultades WHERE activa = TRUE
+)
+GROUP BY estado;
+
+-- 2.
+-- HU_9: Como administrador, quiero acceder a reportes filtrados por periodo, facultad y estado de las denuncias, para monitorear el desempeño y cumplimiento institucional.
+
+SELECT facultad_id, estado, COUNT(*) AS casos
+FROM denuncias
+WHERE fecha BETWEEN '2025-03-01' AND '2025-09-01'AND facultad_id IN (
+   SELECT id FROM facultades WHERE institucion_id = (
+        SELECT id FROM instituciones WHERE ciudad = 'popayan'
+    )
+)
+GROUP BY facultad_id, estado;
+
+-- 3.
+-- HU_8: Como administrador, quiero aplicar subconsultas y filtros avanzados en el sistema para obtener informacion especifica de las denuncias, usuarios y acciones realizadas, optimizando la toma de decisiones.
+
+SELECT nombre FROM usuarios
+WHERE id IN (
+  SELECT usuario_id FROM denuncias WHERE estado = 'cerrada'
+);
+
+-- 4.
+-- HU_7: Como institucion, quiero visualizar y gestionar los casos asignados a mi facultad, aplicando filtros avanzados por estado, gravedad o fecha, para priorizar la atencion y seguimiento.
+
+SELECT codigo, estado, gravedad
+FROM denuncias
+WHERE facultad_id = (
+    SELECT id FROM facultades WHERE nombre = 'ingenieria sistemas'
+)
+AND estado IN ('recibida', 'en proceso');
+
+-- 5.
+-- HU_6: Como victima, quiero consultar el estado y avance de mi caso, aplicando filtros por tipo de denuncia, fechas y atencion recibida, para estar informado sobre las gestiones realizadas.
+
+SELECT codigo, estado, fecha
+FROM denuncias
+WHERE usuario_id = (
+    SELECT id FROM usuarios WHERE nombre = 'alejandro rojas'
+)
+AND tipo = 'acoso'
+AND fecha >= (
+    SELECT MIN(fecha) FROM denuncias WHERE usuario_id = (
+        SELECT id FROM usuarios WHERE nombre = 'alejandro rojas'
+    )
+)
+ORDER BY fecha DESC;
+
+-- 6.
+-- HU_5: Como victima, quiero adjuntar evidencias (fotos, documentos, audios) que respalden mi denuncia, y poder filtrar mis denuncias por tipo de evidencia para facilitar el seguimiento.
+
+SELECT nombre, tipo
+FROM archivos
+WHERE denuncia_id IN (
+    SELECT id FROM denuncias WHERE usuario_id = (
+        SELECT id FROM usuarios WHERE nombre = 'alejandro rojas'
+    )
+)
+AND tipo = 'imagen';
+
+-- 7.
+-- HU_4: Como victima, quiero acceder a un panel donde pueda filtrar y visualizar todas mis evidencias adjuntas y orientaciones recibidas, para organizar y respaldar mis casos.
+
+SELECT mensaje
+FROM orientacion
+WHERE usuario_id = (
+    SELECT id FROM usuarios WHERE nombre = 'alejandro rojas'
+)
+AND estado = 'leida';
+
+-- 8.
+-- HU_3: Como victima, quiero filtrar mis denuncias por fecha, estado y tipo de violencia, para hacer seguimiento detallado y facilitar la consulta de mi historial.
+
+SELECT codigo, tipo, estado
+FROM denuncias
+WHERE usuario_id = (
+    SELECT id FROM usuarios WHERE nombre = 'alejandro rojas'
+)
+AND fecha >= (
+    SELECT fecha_registro FROM usuarios WHERE nombre = 'alejandro rojas'
+);
+
+-- 9.
+-- HU_2: Como administrador, quiero consultar denuncias filtradas por tipo, fecha, gravedad y estado, utilizando subconsultas, para identificar tendencias y tomar acciones correctivas.
+
+SELECT tipo, gravedad
+FROM denuncias
+WHERE estado = 'recibida'
+AND gravedad = 'alta'
+AND facultad_id IN (
+    SELECT id FROM facultades WHERE activa = TRUE
+);
+
+-- 10.
+-- HU_1: Como administrador, quiero poder filtrar y visualizar usuarios segun criterios especificos como facultad, estado de cuenta y nivel de actividad, para gestionar el acceso y uso de la plataforma de forma eficiente.
+
+SELECT nombre, activo
+FROM usuarios
+WHERE activo = TRUE
+AND id IN (
+    SELECT usuario_id FROM denuncias WHERE facultad_id = (
+        SELECT id FROM facultades WHERE nombre = 'ingenieria sistemas'
+    )
+);
+
+
+-- -------------------------------------------------- --
+-- Condiciones de Entrega – Proyecto Base de Datos SQL
+-- -------------------------------------------------- --
+
+-- Imagen Legible del Modelo Relacional
+--   Entregar todas las tablas que hacen parte del modelo relacional.
+--   El modelo debe incluir: entidades, relaciones, llaves primarias y foráneas.
+--   Formato de entrega: Imagen clara en .jpg o .png.
+-- 
+-- Inserciones de Datos (DML)
+-- 
+-- Cada tabla debe contener mínimo 10 registros.
+--   El script debe incluir las sentencias INSERT INTO ... VALUES (...).
+--   Los datos deben ser coherentes y consistentes con el modelo.
+-- 
+-- Consultas SQL (Subconsultas)
+--   Entregar 10 subconsultas en SQL.
+--   Cada subconsulta debe ir acompañada de la descripción de la historia de usuario que resuelve.
+-- 
+-- -- Ejemplo:
+--      Historia de Usuario: "Como administrador necesito ver qué productos tienen un precio mayor al promedio para tomar decisiones de venta."
+--      Subconsulta SQL: (script correspondiente).
+-- 
+-- 
+-- Archivo en NOMBRE_PROYECTO.txt con lo siguiente:
+-- 
+-- Sentencias DDL (creación de base de datos y tablas).
+-- Sentencias DML (inserciones de datos).
+--   Las 10 subconsultas con sus comentarios.
+--   Debe estar ordenado y comentado adecuadamente.
+
+-- Enviar al correo diego.prado.o@uniautonoma.edu.co
+-- Asunto Parcial 1 Bases de Datos 2
+-- Adjuntar imagen del MR
+-- Adjuntar Archivo NOMBRE_PROYECTO.txt
+-- (OPCIONAL)  link del repositorio github con los 2 archivos
