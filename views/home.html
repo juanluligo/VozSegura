@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VozSegura - Inicio</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="nav-brand">
+                <img src="../assets/logo proyecto web .jpeg" alt="logodel proyecto">
+                <h1>VozSegura</h1>
+            </div>
+            <nav class="nav-menu">
+                <a href="#inicio" class="nav-link">Inicio</a>
+                <a href="#como-funciona" class="nav-link">Cómo Funciona</a>
+                <a href="#recursos" class="nav-link">Recursos</a>
+                <a href="login.html" class="btn-login">Ingresar</a>
+            </nav>
+            <div class="mobile-menu" id="mobile-menu">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Carrusel de imágenes -->
+    <section class="carousel-section">
+        <div class="carousel-container">
+            <div class="carousel-wrapper">
+                <div class="carousel-slide slide-1 active">
+                    <img src="../assets/imagen de seguridad.jpg" alt="Un espacio seguro para todos">
+                    <div class="carousel-caption">
+                        <h3>Un Espacio Seguro para Todos</h3>
+                        <p>Promoviendo ambientes educativos libres de violencia</p>
+                    </div>
+                </div>
+                <div class="carousel-slide slide-2">
+                    <img src="../assets/cybersecurity.jpg" alt="Confidencialidad garantizada">
+                    <div class="carousel-caption">
+                        <h3>Confidencialidad Garantizada</h3>
+                        <p>Tu identidad está protegida en todo momento</p>
+                    </div>
+                </div>
+                <div class="carousel-slide slide-3">
+                    <img src="../assets/diversidad e inclusion.jpg" alt="Diversidad e inclusión">
+                    <div class="carousel-caption">
+                        <h3>Diversidad e Inclusión</h3>
+                        <p>Respetamos y protegemos a toda nuestra comunidad</p>
+                    </div>
+                </div>
+                <div class="carousel-slide slide-4">
+                    <img src="../assets/apoyo.jpg" alt="Apoyo profesional 24/7">
+                    <div class="carousel-caption">
+                        <h3>Apoyo Profesional 24/7</h3>
+                        <p>Equipo especializado listo para ayudarte</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Controles del carrusel -->
+            <button class="carousel-btn prev" onclick="moveSlide(-1)">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="carousel-btn next" onclick="moveSlide(1)">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+            
+            <!-- Indicadores -->
+            <div class="carousel-indicators">
+                <span class="indicator active" onclick="currentSlide(0)"></span>
+                <span class="indicator" onclick="currentSlide(1)"></span>
+                <span class="indicator" onclick="currentSlide(2)"></span>
+                <span class="indicator" onclick="currentSlide(3)"></span>
+            </div>
+        </div>
+    </section>
+
+    <section id="inicio" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h2>Tu Voz Importa</h2>
+                <p>Plataforma segura para denunciar violencia de género<br>de forma anónima en tu institución educativa</p>
+                
+                <div class="hero-circle">
+                    <div class="people-icons">
+                        <i class="fas fa-user-circle user-icon red"></i>
+                        <i class="fas fa-user-circle user-icon green"></i>
+                        <i class="fas fa-user-circle user-icon blue"></i>
+                        <i class="fas fa-user-circle user-icon orange"></i>
+                        <i class="fas fa-user-circle user-icon purple"></i>
+                        <i class="fas fa-user-circle user-icon teal"></i>
+                    </div>
+                    <div class="circle-text">
+                        Diversidad • Inclusión • Protección
+                    </div>
+                </div>
+                
+                <div class="hero-buttons">
+                    <a href="login.html" class="btn btn-primary btn-lock">
+                        <i class="fas fa-lock"></i> Hacer Denuncia Anónima
+                    </a>
+                    <a href="#recursos" class="btn btn-secondary-hero">
+                        <i class="fas fa-comment"></i> Necesito Ayuda Ahora
+                    </a>
+                    <div class="consult-link">
+                        <a href="#consulta" class="link-consult">
+                            <i class="fas fa-search"></i> Consultar Estado de mi Denuncia
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="hero-tags">
+                    <span class="tag"><i class="fas fa-check"></i> 100% Anónimo</span>
+                    <span class="tag"><i class="fas fa-check"></i> Seguro</span>
+                    <span class="tag"><i class="fas fa-check"></i> Confidencial</span>
+                    <span class="tag"><i class="fas fa-check"></i> 24/7</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="como-funciona" class="features">
+        <div class="container">
+            <h2>Cómo Funciona VozSegura</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-user-shield"></i>
+                    <h3>Denuncia Segura</h3>
+                    <p>Registra tu denuncia de forma confidencial y segura</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-search"></i>
+                    <h3>Seguimiento</h3>
+                    <p>Consulta el estado de tu caso en tiempo real</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-hands-helping"></i>
+                    <h3>Apoyo Integral</h3>
+                    <p>Accede a recursos de ayuda psicológica y legal</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="por-que-usar" class="why-use">
+        <div class="container">
+            <h2>¿Por Qué Usar VozSegura?</h2>
+            <p>Tu seguridad y bienestar son nuestra prioridad</p>
+            <div class="why-use-grid">
+                <div class="why-card">
+                    <img src="../assets/logo proyecto web .jpeg" alt="logodel proyecto" class="card-logo">
+                    <h3>Sin Miedo</h3>
+                    <p>Denuncia sin temor a represalias con total protección</p>
+                </div>
+                <div class="why-card">
+                    <i class="fas fa-clock"></i>
+                    <h3>Respuesta Rápida</h3>
+                    <p>Atención inmediata a tu caso las 24 horas del día</p>
+                </div>
+                <div class="why-card">
+                    <i class="fas fa-user-tie"></i>
+                    <h3>Apoyo Profesional</h3>
+                    <p>Equipo especializado en atención psicológica y legal</p>
+                </div>
+                <div class="why-card">
+                    <i class="fas fa-universal-access"></i>
+                    <h3>Accesible</h3>
+                    <p>Plataforma fácil de usar desde cualquier dispositivo</p>
+                </div>
+                <div class="why-card">
+                    <i class="fas fa-user-secret"></i>
+                    <h3>Privacidad Total</h3>
+                    <p>Tu identidad permanece completamente protegida</p>
+                </div>
+                <div class="why-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Impacto Real</h3>
+                    <p>Genera cambios positivos en tu comunidad educativa</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="recursos" class="resources">
+        <div class="container">
+            <h2>Recursos de Ayuda</h2>
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <i class="fas fa-brain"></i>
+                    <h3>Apoyo Psicológico</h3>
+                    <p>Guías y contactos para apoyo emocional</p>
+                </div>
+                <div class="resource-card">
+                    <i class="fas fa-balance-scale"></i>
+                    <h3>Asesoría Legal</h3>
+                    <p>Orientación jurídica gratuita</p>
+                </div>
+                <div class="resource-card">
+                    <i class="fas fa-phone"></i>
+                    <h3>Líneas de Emergencia</h3>
+                    <p>Contactos de emergencia 24/7</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section id="impacto" class="impact">
+        <div class="container">
+            <h2>Nuestro Impacto</h2>
+            <p>Hacemos la diferencia en comunidades educativas</p>
+            <div class="impact-stats">
+                <div class="stat-circle">
+                    <div class="stat-number">+500</div>
+                    <div class="stat-label">Casos Atendidos</div>
+                </div>
+                <div class="stat-circle">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Confidencialidad</div>
+                </div>
+                <div class="stat-circle">
+                    <div class="stat-number">-24h</div>
+                    <div class="stat-label">Respuesta</div>
+                </div>
+                <div class="stat-circle">
+                    <div class="stat-number">95%</div>
+                    <div class="stat-label">Satisfacción</div>
+                </div>
+                <div class="stat-circle">
+                    <div class="stat-number">+50</div>
+                    <div class="stat-label">Instituciones</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="cta" class="cta-section">
+        <div class="container">
+            <h2>¿Listo/a para Actuar?</h2>
+            <p>No esperes más, tu voz puede marcar la diferencia</p>
+            <a href="login.html" class="btn btn-primary btn-large">Hacer mi Denuncia Ahora</a>
+            <div class="cta-links">
+                <a href="#recursos" class="cta-link">Línea de Ayuda</a>
+                <a href="#como-funciona" class="cta-link">Más Información</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="../assets/logo proyecto web .jpeg" alt="logodel proyecto" class="footer-logo">
+                    <h3>VozSegura</h3>
+                    <p>Protegiendo tu bienestar y promoviendo ambientes seguros</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Enlaces</h4>
+                    <a href="#inicio">Inicio</a>
+                    <a href="#como-funciona">Cómo Funciona</a>
+                    <a href="#recursos">Recursos</a>
+                    <a href="login.html">Ingresar</a>
+                </div>
+                <div class="footer-contact">
+                    <h4>Contacto</h4>
+                    <p><i class="fas fa-envelope"></i> ayuda@vozsegura.com</p>
+                    <p><i class="fas fa-phone"></i> Línea de Ayuda: 123</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 VozSegura. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
