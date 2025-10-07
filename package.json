@@ -1,5 +1,5 @@
 {
-  "name": "voz-segura",
+  "name": "vozsegura",
   "version": "1.0.0",
   "description": "Plataforma anónima de denuncia de violencia en instituciones educativas",
   "main": "server.js",
