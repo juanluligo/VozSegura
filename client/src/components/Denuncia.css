@@ -1,0 +1,253 @@
+.denuncia-page {
+  background: #f7f9fb;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.denuncia-page .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 3rem;
+  background: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.denuncia-page .logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #046e58;
+}
+
+.denuncia-page nav a {
+  margin: 0 1rem;
+  text-decoration: none;
+  color: #555;
+  font-weight: 500;
+}
+
+.denuncia-page nav a.active {
+  color: #006aff;
+  font-weight: 600;
+}
+
+.denuncia-page .user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-salir {
+  background-color: #ff6b6b;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.btn-salir:hover {
+  background: #e65a5a;
+}
+
+/* Main Content */
+.denuncia-page .content {
+  max-width: 900px;
+  margin: 2.5rem auto;
+  background: #fff;
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+  flex: 1;
+}
+
+.denuncia-page .progress-bar {
+  height: 6px;
+  background: #e6e6e6;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+
+.denuncia-page .progress {
+  width: 33%;
+  height: 100%;
+  background: #4a90e2;
+  transition: width 0.3s ease;
+}
+
+.denuncia-page h2 {
+  font-size: 1.8rem;
+  margin-bottom: 0.4rem;
+}
+
+.denuncia-page .subtitle {
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+/* Cards */
+.denuncia-page .cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.8rem;
+}
+
+.denuncia-page .card {
+  background: #f4f6fb;
+  padding: 1.5rem;
+  border-radius: 15px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.3s;
+  border: 2px solid transparent;
+}
+
+.denuncia-page .card:hover {
+  background: #e9f0ff;
+}
+
+.denuncia-page .card.active {
+  border-color: #4a90e2;
+  background: #eaf3ff;
+}
+
+.denuncia-page .card i {
+  font-size: 1.5rem;
+  color: #4a90e2;
+  margin-bottom: 0.6rem;
+}
+
+/* Form Section */
+.denuncia-page .form-section label {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.denuncia-page textarea {
+  width: 100%;
+  border: 1.5px solid #ccc;
+  border-radius: 10px;
+  padding: 10px;
+  resize: none;
+  transition: border-color 0.2s;
+  font-family: inherit;
+}
+
+.denuncia-page textarea:focus {
+  outline: none;
+  border-color: #4a90e2;
+}
+
+.denuncia-page select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1em;
+  transition: border-color 0.2s;
+}
+
+.denuncia-page select:focus {
+  outline: none;
+  border-color: #4a90e2;
+}
+
+.denuncia-page select:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+/* Info Box */
+.denuncia-page .info-box {
+  background: #eef3ff;
+  border-left: 5px solid #4a90e2;
+  padding: 1rem 1.2rem;
+  border-radius: 10px;
+  margin: 1.8rem 0;
+  color: #333;
+}
+
+/* Buttons */
+.denuncia-page .buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+}
+
+.denuncia-page .cancel-btn,
+.denuncia-page .next-btn {
+  padding: 0.8rem 1.8rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.denuncia-page .cancel-btn {
+  background: #f2f2f2;
+  color: #444;
+}
+
+.denuncia-page .cancel-btn:hover {
+  background: #e4e4e4;
+}
+
+.denuncia-page .next-btn {
+  background: #4a90e2;
+  color: #fff;
+  font-weight: 600;
+}
+
+.denuncia-page .next-btn:hover:not(:disabled) {
+  background: #357ad8;
+}
+
+.denuncia-page .next-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+/* Footer */
+.denuncia-page .footer {
+  background: #1b1c1d;
+  color: #ccc;
+  text-align: center;
+  padding: 1.5rem;
+  font-size: 0.9rem;
+  margin-top: auto;
+}
+
+.denuncia-page .footer a {
+  color: #9cbef5;
+  text-decoration: none;
+  margin-left: 10px;
+}
+
+.denuncia-page .footer a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .denuncia-page .header {
+    padding: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .denuncia-page .content {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+
+  .denuncia-page .cards {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  }
+}
