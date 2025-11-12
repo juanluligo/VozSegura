@@ -62,6 +62,9 @@ function Home() {
             <a href="#inicio" className="nav-link">Inicio</a>
             <a href="#como-funciona" className="nav-link">Cómo Funciona</a>
             <a href="#recursos" className="nav-link">Recursos</a>
+            <Link to="/consultar" className="nav-link">
+              <i className="fas fa-search"></i> Consultar
+            </Link>
             <Link to="/login" className="btn-login">Ingresar</Link>
           </nav>
         </div>

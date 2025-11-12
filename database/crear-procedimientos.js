@@ -104,8 +104,36 @@ async function crearProcedimientos() {
         `);
         console.log('✅ sp_estadisticas_generales creado\n');
 
+        // Procedimiento 5: Obtener denuncias de un usuario
+        console.log('5️⃣ Creando sp_obtener_denuncias_usuario...');
+        await connection.query('DROP PROCEDURE IF EXISTS sp_obtener_denuncias_usuario');
+        await connection.query(`
+            CREATE PROCEDURE sp_obtener_denuncias_usuario(
+                IN p_usuario_id INT
+            )
+            BEGIN
+                SELECT 
+                    d.id,
+                    d.codigo,
+                    d.tipo,
+                    d.descripcion,
+                    d.fecha,
+                    d.gravedad,
+                    d.estado,
+                    d.fecha_creacion,
+                    d.fecha_actualizacion,
+                    f.nombre as facultad_nombre,
+                    f.id as facultad_id
+                FROM denuncias d
+                LEFT JOIN facultades f ON d.facultad_id = f.id
+                WHERE d.usuario_id = p_usuario_id
+                ORDER BY d.fecha_creacion DESC;
+            END
+        `);
+        console.log('✅ sp_obtener_denuncias_usuario creado\n');
+
         // Crear el administrador si no existe
-        console.log('5️⃣ Creando administrador por defecto...');
+        console.log('6️⃣ Creando administrador por defecto...');
         const [adminExists] = await connection.query('SELECT id FROM administradores WHERE email = ?', ['admin@vozsegura.com']);
         
         if (adminExists.length === 0) {

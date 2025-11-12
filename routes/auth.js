@@ -6,7 +6,8 @@ const {
     login,
     loginAdmin,
     obtenerUsuarioActual,
-    cambiarPassword
+    cambiarPassword,
+    crearAdminInicial
 } = require('../controllers/authController');
 const { protect } = require('../middleware/auth');
 
@@ -21,6 +22,7 @@ const validacionRegistro = [
 router.post('/registro', validacionRegistro, registro);
 router.post('/login', login);
 router.post('/admin/login', loginAdmin);
+router.post('/crear-admin-inicial', crearAdminInicial);
 
 // Rutas protegidas (requieren autenticación)
 router.get('/me', protect, obtenerUsuarioActual);

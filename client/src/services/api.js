@@ -26,11 +26,19 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    console.log('❌ Error en API:', error.response?.status, error.response?.data);
+    console.log('❌ Error completo:', error);
+    console.log('❌ URL que falló:', error.config?.url);
+    console.log('❌ Headers enviados:', error.config?.headers);
+    
     if (error.response && error.response.status === 401) {
       // Token inválido o expirado
-      localStorage.removeItem('token');
-      localStorage.removeItem('usuario');
-      window.location.href = '/login';
+      console.log('🚫 Error 401 - Token inválido');
+      console.log('🚫 Mensaje del servidor:', error.response.data);
+      // COMENTADO TEMPORALMENTE PARA DEBUG
+      // localStorage.removeItem('token');
+      // localStorage.removeItem('usuario');
+      // window.location.href = '/login';
     }
     return Promise.reject(error);
   }
@@ -83,13 +91,33 @@ export const denunciaService = {
     return response.data;
   },
 
-  obtenerPorCodigo: async (codigo) => {
-    const response = await api.get(`/denuncias/${codigo}`);
+  consultarPorCodigo: async (codigo) => {
+    const response = await api.get(`/denuncias/consultar/${codigo}`);
+    return response.data;
+  },
+
+  misDenuncias: async () => {
+    const response = await api.get('/denuncias/mis-denuncias');
+    return response.data;
+  },
+
+  obtenerPorId: async (id) => {
+    const response = await api.get(`/denuncias/${id}`);
     return response.data;
   },
 
   actualizar: async (id, datos) => {
     const response = await api.put(`/denuncias/${id}`, datos);
+    return response.data;
+  },
+
+  actualizarEstado: async (id, estado, comentario = '') => {
+    const response = await api.put(`/denuncias/${id}/estado`, { estado, comentario });
+    return response.data;
+  },
+
+  obtenerEstadisticas: async () => {
+    const response = await api.get('/denuncias/estadisticas/general');
     return response.data;
   }
 };

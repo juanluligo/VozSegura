@@ -63,6 +63,14 @@ exports.login = async (req, res) => {
         // Buscar usuario
         const usuario = await Usuario.buscarPorEmail(email);
 
+        console.log('🔍 Usuario encontrado:', {
+            id: usuario?.id,
+            email: usuario?.email,
+            nombre: usuario?.nombre,
+            rol: usuario?.rol,
+            activo: usuario?.activo
+        });
+
         if (!usuario) {
             return res.status(401).json({
                 success: false,
@@ -91,7 +99,7 @@ exports.login = async (req, res) => {
         // Generar token
         const token = Usuario.generarJWT(usuario);
 
-        res.status(200).json({
+        const respuesta = {
             success: true,
             message: 'Login exitoso',
             token,
@@ -99,9 +107,14 @@ exports.login = async (req, res) => {
                 id: usuario.id,
                 nombre: usuario.nombre,
                 email: usuario.email,
-                tipo: 'usuario'
+                rol: usuario.rol || 'estudiante',
+                tipo: usuario.rol === 'admin' ? 'admin' : 'usuario'
             }
-        });
+        };
+
+        console.log('✅ Respuesta de login:', JSON.stringify(respuesta, null, 2));
+
+        res.status(200).json(respuesta);
 
     } catch (error) {
         console.error('Error en login:', error);
@@ -258,6 +271,57 @@ exports.cambiarPassword = async (req, res) => {
             success: false,
             message: 'Error al cambiar contraseña',
             error: error.message
+        });
+    }
+};
+
+// Crear admin inicial
+exports.crearAdminInicial = async (req, res) => {
+    try {
+        const bcrypt = require('bcryptjs');
+        const db = require('../config/database');
+
+        const email = 'admin@vozsegura.com';
+        const password = 'admin123';
+        const nombre = 'Administrador';
+
+        // Verificar si ya existe
+        const [existente] = await db.query('SELECT id FROM usuarios WHERE email = ?', [email]);
+        
+        if (existente.length > 0) {
+            // Si existe, hacerlo admin
+            await db.query('UPDATE usuarios SET rol = ? WHERE email = ?', ['admin', email]);
+            return res.json({
+                success: true,
+                message: 'Usuario existente actualizado a admin',
+                credentials: { email, password: 'admin123' }
+            });
+        }
+
+        // Hash de contraseña
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        // Crear admin
+        await db.query(
+            'INSERT INTO usuarios (nombre, email, password, rol) VALUES (?, ?, ?, ?)',
+            [nombre, email, hashedPassword, 'admin']
+        );
+
+        res.json({
+            success: true,
+            message: 'Admin creado exitosamente',
+            credentials: {
+                email: 'admin@vozsegura.com',
+                password: 'admin123'
+            }
+        });
+
+    } catch (error) {
+        console.error('Error creando admin:', error);
+        res.status(500).json({
+            success: false,
+            message: error.message
         });
     }
 };

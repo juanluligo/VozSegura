@@ -55,7 +55,7 @@ class Usuario {
     static async buscarPorId(id) {
         try {
             const usuario = await queryOne(
-                'SELECT id, nombre, email, fecha_registro, activo FROM usuarios WHERE id = ?',
+                'SELECT id, nombre, email, rol, fecha_registro, activo FROM usuarios WHERE id = ?',
                 [id]
             );
             return usuario;
@@ -75,7 +75,8 @@ class Usuario {
             { 
                 id: usuario.id, 
                 email: usuario.email,
-                tipo: 'usuario'
+                rol: usuario.rol || 'estudiante',
+                tipo: usuario.rol === 'admin' ? 'admin' : 'usuario'
             },
             process.env.JWT_SECRET || 'secreto_temporal_cambiar',
             { expiresIn: process.env.JWT_EXPIRE || '7d' }

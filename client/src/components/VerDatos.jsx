@@ -1,47 +1,35 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { authService } from '../services/api';
+import { useNavigate, Link } from 'react-router-dom';
+import { authService, denunciaService } from '../services/api';
 import './VerDatos.css';
 
 function VerDatos() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [stats, setStats] = useState({ totalUsuarios: 0, totalDenuncias: 0 });
-  const [usuarios, setUsuarios] = useState([]);
   const [denuncias, setDenuncias] = useState([]);
 
   useEffect(() => {
-    // Verificar que el usuario sea admin o docente
-    const usuario = authService.getUsuarioActual();
-    if (!usuario || (usuario.rol !== 'admin' && usuario.rol !== 'docente')) {
-      navigate('/');
-      return;
-    }
-
     cargarDatos();
-  }, [navigate]);
+  }, []);
 
   const cargarDatos = async () => {
     setLoading(true);
     setError('');
 
     try {
-      const response = await fetch('/api/test/ver-datos');
-      const data = await response.json();
+      console.log('🔵 VerDatos - Cargando denuncias...');
+      const data = await denunciaService.obtenerTodas();
+      
+      console.log('✅ Denuncias cargadas:', data);
 
-      if (!data.success) {
-        throw new Error(data.error || 'Error al cargar datos');
+      if (data.success) {
+        setDenuncias(data.denuncias || []);
+      } else {
+        throw new Error(data.message || 'Error al cargar denuncias');
       }
-
-      setStats({
-        totalUsuarios: data.totalUsuarios,
-        totalDenuncias: data.totalDenuncias
-      });
-      setUsuarios(data.usuarios || []);
-      setDenuncias(data.denuncias || []);
     } catch (err) {
-      console.error('Error:', err);
+      console.error('❌ Error cargando denuncias:', err);
       setError(err.message || 'Error al cargar los datos');
     } finally {
       setLoading(false);
@@ -57,12 +45,18 @@ function VerDatos() {
     <div className="ver-datos-page">
       <div className="container">
         <div className="header-actions">
-          <h1>📊 Datos Guardados en VozSegura</h1>
-          <button className="btn-logout" onClick={handleLogout}>Cerrar Sesión</button>
+          <h1>Datos almacenados en VozSegura</h1>
+          <div className="header-buttons">
+            <Link to="/dashboard" className="btn-dashboard">
+              <i className="fas fa-chart-line"></i>
+              Dashboard
+            </Link>
+            <button className="btn-logout" onClick={handleLogout}>Cerrar Sesión</button>
+          </div>
         </div>
 
         <button className="btn-refresh" onClick={cargarDatos}>
-          🔄 Actualizar Datos
+          Actualizar Datos
         </button>
 
         {loading && <div className="loading">Cargando datos...</div>}
@@ -73,49 +67,13 @@ function VerDatos() {
           <>
             <div className="stats">
               <div className="stat-card">
-                <div className="stat-label">Total Usuarios</div>
-                <div className="stat-number">{stats.totalUsuarios}</div>
-              </div>
-              <div className="stat-card">
                 <div className="stat-label">Total Denuncias</div>
-                <div className="stat-number">{stats.totalDenuncias}</div>
+                <div className="stat-number">{denuncias.length}</div>
               </div>
             </div>
 
             <div className="section">
-              <h2>👥 Usuarios Registrados</h2>
-              <div className="items-list">
-                {usuarios.length === 0 ? (
-                  <div className="empty">No hay usuarios registrados todavía</div>
-                ) : (
-                  usuarios.map((usuario, index) => (
-                    <div key={usuario.id} className="item">
-                      <div className="item-content">
-                        <strong>Usuario #{index + 1}:</strong> {usuario.nombre}
-                      </div>
-                      <div className="item-content">
-                        <strong>Email:</strong> {usuario.email}
-                      </div>
-                      <div className="item-content">
-                        <strong>Rol:</strong> {usuario.rol}
-                      </div>
-                      <div className="item-content">
-                        <strong>Institución:</strong> {usuario.institucion || 'No especificada'}
-                      </div>
-                      <div className="item-content">
-                        <strong>Registrado:</strong>{' '}
-                        <span className="timestamp">
-                          {new Date(usuario.createdAt).toLocaleString('es')}
-                        </span>
-                      </div>
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
-
-            <div className="section">
-              <h2>📢 Denuncias Registradas</h2>
+              <h2>Denuncias Registradas</h2>
               <div className="items-list">
                 {denuncias.length === 0 ? (
                   <div className="empty">No hay denuncias registradas todavía</div>
@@ -135,24 +93,19 @@ function VerDatos() {
                       <div className="item-content">
                         <strong>Estado:</strong>{' '}
                         <span className={`estado ${denuncia.estado}`}>
-                          {denuncia.estado.replace('_', ' ')}
+                          {denuncia.estado?.replace('_', ' ')}
                         </span>
                       </div>
                       <div className="item-content">
-                        <strong>Ubicación:</strong> {denuncia.ubicacion || 'No especificada'}
+                        <strong>Gravedad:</strong>{' '}
+                        <span className={`gravedad ${denuncia.gravedad}`}>
+                          {denuncia.gravedad}
+                        </span>
                       </div>
                       <div className="item-content">
-                        <strong>Anónima:</strong> {denuncia.anonima ? 'Sí' : 'No'}
-                      </div>
-                      {denuncia.usuario && (
-                        <div className="item-content">
-                          <strong>Usuario:</strong> {denuncia.usuario.nombre} ({denuncia.usuario.email})
-                        </div>
-                      )}
-                      <div className="item-content">
-                        <strong>Creada:</strong>{' '}
+                        <strong>Fecha:</strong>{' '}
                         <span className="timestamp">
-                          {new Date(denuncia.createdAt).toLocaleString('es')}
+                          {new Date(denuncia.fecha || denuncia.fecha_creacion).toLocaleString('es-ES')}
                         </span>
                       </div>
                     </div>
