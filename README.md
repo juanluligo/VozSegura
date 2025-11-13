@@ -1,236 +1,236 @@
-# 🎯 VozSegura - Sistema de Denuncias
+#🎯VozSegura-SistemadeDenuncias
 
-Plataforma completa de denuncias con **React + Express + MySQL**, autenticación JWT y gestión administrativa.
+Plataformacompletadedenunciascon**React+Express+MySQL**,autenticaciónJWTygestiónadministrativa.
 
 
-**El frontend ha sido completamente migrado a React** manteniendo toda la funcionalidad original.
+**ElfrontendhasidocompletamentemigradoaReact**manteniendotodalafuncionalidadoriginal.
 
-- 🚀 **Frontend:** React con Vite
-- 🟢 **Backend:** Express + Node.js
-- 🗄️ **Base de Datos:** MySQL
+-🚀**Frontend:**ReactconVite
+-🟢**Backend:**Express+Node.js
+-🗄️**BasedeDatos:**MySQL
 
-## ✅ Sistema Completamente Funcional
+##✅SistemaCompletamenteFuncional
 
-### 🚀 Características Principales
+###🚀CaracterísticasPrincipales
 
-✅ **Registro y Login** de usuarios y administradores  
-✅ **Sistema de denuncias** con código único automático  
-✅ **Seguimiento completo** de denuncias con historial  
-✅ **Atenciones** (psicológica, legal, social)  
-✅ **Recursos de ayuda** asignables a denuncias  
-✅ **Estadísticas** en tiempo real  
-✅ **Procedimientos almacenados** y vistas optimizadas  
+✅**RegistroyLogin**deusuariosyadministradores
+✅**Sistemadedenuncias**concódigoúnicoautomático
+✅**Seguimientocompleto**dedenunciasconhistorial
+✅**Atenciones**(psicológica,legal,social)
+✅**Recursosdeayuda**asignablesadenuncias
+✅**Estadísticas**entiemporeal
+✅**Procedimientosalmacenados**yvistasoptimizadas
 
 ---
 
-## � Inicio Rápido
+##�InicioRápido
 
-### 1. Configurar Base de Datos MySQL
+###1.ConfigurarBasedeDatosMySQL
 
-**Actualiza tu contraseña en `.env`:**
+**Actualizatucontraseñaen`.env`:**
 ```env
 DB_PASSWORD=tu_contraseña_mysql
 ```
 
-**Ejecuta el script SQL:**
+**EjecutaelscriptSQL:**
 ```powershell
-# Opción 1: Setup automático
-node database/setup-database.js
+#Opción1:Setupautomático
+nodedatabase/setup-database.js
 
-# Opción 2: Manual
-mysql -u root -p < database/schema.sql
+#Opción2:Manual
+mysql-uroot-p<database/schema.sql
 ```
 
-### 2. Probar Conexión
+###2.ProbarConexión
 
 ```powershell
-node database/test-connection.js
+nodedatabase/test-connection.js
 ```
 
-### 3. Iniciar Servidor
+###3.IniciarServidor
 
 ```powershell
-npm start
+npmstart
 ```
 
-Abre: http://localhost:3000
+Abre:http://localhost:3000
 
 ---
 
-## 🔑 Credenciales Iniciales
+##🔑CredencialesIniciales
 
 **Administrador:**
-- Email: `admin@vozsegura.com`
-- Password: `Admin123!`
+-Email:`admin@vozsegura.com`
+-Password:`Admin123!`
 
 
 ---
 
-## 🧪 Pruebas Rápidas (PowerShell)
+##🧪PruebasRápidas(PowerShell)
 
-### 1. Registrar Usuario
+###1.RegistrarUsuario
 ```powershell
-$body = @{
-    nombre = "Juan Pérez"
-    email = "juan@ejemplo.com"
-    password = "123456"
-} | ConvertTo-Json
+$body=@{
+nombre="JuanPérez"
+email="juan@ejemplo.com"
+password="123456"
+}|ConvertTo-Json
 
-$response = Invoke-RestMethod -Uri "http://localhost:3000/api/auth/registro" -Method POST -Body $body -ContentType "application/json"
-$token = $response.token
+$response=Invoke-RestMethod-Uri"http://localhost:3000/api/auth/registro"-MethodPOST-Body$body-ContentType"application/json"
+$token=$response.token
 ```
 
-### 2. Crear Denuncia
+###2.CrearDenuncia
 ```powershell
-$headers = @{ Authorization = "Bearer $token"; "Content-Type" = "application/json" }
-$denuncia = @{
-    tipo = "Acoso verbal"
-    descripcion = "Descripción de la denuncia"
-    fecha = "2024-10-14"
-    gravedad = "media"
-    facultad_id = 1
-} | ConvertTo-Json
+$headers=@{Authorization="Bearer$token";"Content-Type"="application/json"}
+$denuncia=@{
+tipo="Acosoverbal"
+descripcion="Descripcióndeladenuncia"
+fecha="2024-10-14"
+gravedad="media"
+facultad_id=1
+}|ConvertTo-Json
 
-$res = Invoke-RestMethod -Uri "http://localhost:3000/api/denuncias" -Method POST -Headers $headers -Body $denuncia
-Write-Host "Código: $($res.codigo)"
+$res=Invoke-RestMethod-Uri"http://localhost:3000/api/denuncias"-MethodPOST-Headers$headers-Body$denuncia
+Write-Host"Código:$($res.codigo)"
 ```
 
-### 3. Login Admin
+###3.LoginAdmin
 ```powershell
-$body = @{
-    email = "admin@vozsegura.com"
-    password = "Admin123!"
-} | ConvertTo-Json
+$body=@{
+email="admin@vozsegura.com"
+password="Admin123!"
+}|ConvertTo-Json
 
-$admin = Invoke-RestMethod -Uri "http://localhost:3000/api/auth/admin/login" -Method POST -Body $body -ContentType "application/json"
-$adminToken = $admin.token
+$admin=Invoke-RestMethod-Uri"http://localhost:3000/api/auth/admin/login"-MethodPOST-Body$body-ContentType"application/json"
+$adminToken=$admin.token
 ```
 
 ---
 
-## 📡 API Endpoints
+##📡APIEndpoints
 
-**Ver documentación completa en:** `API-DOCS.md`
+**Verdocumentacióncompletaen:**`API-DOCS.md`
 
-### Principales Endpoints
+###PrincipalesEndpoints
 
 **Autenticación:**
-- `POST /api/auth/registro` - Registrar usuario
-- `POST /api/auth/login` - Login usuario
-- `POST /api/auth/admin/login` - Login admin
+-`POST/api/auth/registro`-Registrarusuario
+-`POST/api/auth/login`-Loginusuario
+-`POST/api/auth/admin/login`-Loginadmin
 
 **Denuncias:**
-- `POST /api/denuncias` - Crear denuncia
-- `GET /api/denuncias/mis-denuncias` - Mis denuncias
-- `GET /api/denuncias/consultar/:codigo` - Consultar por código
-- `GET /api/denuncias` - Todas (admin)
-- `PUT /api/denuncias/:id/estado` - Actualizar estado (admin)
+-`POST/api/denuncias`-Creardenuncia
+-`GET/api/denuncias/mis-denuncias`-Misdenuncias
+-`GET/api/denuncias/consultar/:codigo`-Consultarporcódigo
+-`GET/api/denuncias`-Todas(admin)
+-`PUT/api/denuncias/:id/estado`-Actualizarestado(admin)
 
 **Catálogo:**
-- `GET /api/catalogo/instituciones` - Listar instituciones
-- `GET /api/catalogo/facultades` - Listar facultades
-- `GET /api/catalogo/recursos` - Recursos de ayuda
+-`GET/api/catalogo/instituciones`-Listarinstituciones
+-`GET/api/catalogo/facultades`-Listarfacultades
+-`GET/api/catalogo/recursos`-Recursosdeayuda
 
 ---
 
-## 📊 Base de Datos
+##📊BasedeDatos
 
-### Tablas (12)
-- `usuarios`, `administradores`, `denuncias`, `instituciones`, `facultades`
-- `recursos`, `archivos`, `seguimiento_denuncia`, `atenciones`
-- `log_accion`, `orientacion`, `denuncia_recurso`
+###Tablas(12)
+-`usuarios`,`administradores`,`denuncias`,`instituciones`,`facultades`
+-`recursos`,`archivos`,`seguimiento_denuncia`,`atenciones`
+-`log_accion`,`orientacion`,`denuncia_recurso`
 
-### Procedimientos Almacenados (7)
-- `sp_crear_denuncia` - Crear con código único
-- `sp_actualizar_estado_denuncia` - Cambiar estado + seguimiento
-- `sp_registrar_atencion` - Registrar atención
-- `sp_obtener_denuncias_usuario` - Denuncias de usuario
-- `sp_estadisticas_generales` - Dashboard
-- Y más...
+###ProcedimientosAlmacenados(7)
+-`sp_crear_denuncia`-Crearconcódigoúnico
+-`sp_actualizar_estado_denuncia`-Cambiarestado+seguimiento
+-`sp_registrar_atencion`-Registraratención
+-`sp_obtener_denuncias_usuario`-Denunciasdeusuario
+-`sp_estadisticas_generales`-Dashboard
+-Ymás...
 
-### Vistas (6)
-- `vista_denuncias_completas`
-- `vista_estadisticas_estado`
-- `vista_denuncias_recientes`
-- Y más...
+###Vistas(6)
+-`vista_denuncias_completas`
+-`vista_estadisticas_estado`
+-`vista_denuncias_recientes`
+-Ymás...
 
 ---
 
-## 📁 Estructura del Proyecto
+##📁EstructuradelProyecto
 
 ```
 VozSegura/
-├── client/                  # ⚛️ Frontend React
-│   ├── src/
-│   │   ├── components/      # Componentes React
-│   │   ├── services/        # API services
-│   │   └── App.jsx          # App principal
-│   ├── public/assets/       # Imágenes
-│   └── package.json         # Dependencias frontend
-├── config/
-│   └── database.js          # Conexión MySQL
-├── models/                  # Modelos de datos
-├── controllers/             # Lógica de negocio
-├── routes/                  # Rutas API
-├── middleware/              # Autenticación JWT
-├── database/                # Scripts SQL
-├── assets/                  # Imágenes del servidor
-├── .env                     # Configuración
-├── server.js                # Servidor Express
-├── README.md                # Este archivo
-├── API-DOCS.md              # Documentación API
-└── ESTRUCTURA-PROYECTO.md   # Documentación completa
+├──client/#⚛️FrontendReact
+│├──src/
+││├──components/#ComponentesReact
+││├──services/#APIservices
+││└──App.jsx#Appprincipal
+│├──public/assets/#Imágenes
+│└──package.json#Dependenciasfrontend
+├──config/
+│└──database.js#ConexiónMySQL
+├──models/#Modelosdedatos
+├──controllers/#Lógicadenegocio
+├──routes/#RutasAPI
+├──middleware/#AutenticaciónJWT
+├──database/#ScriptsSQL
+├──assets/#Imágenesdelservidor
+├──.env#Configuración
+├──server.js#ServidorExpress
+├──README.md#Estearchivo
+├──API-DOCS.md#DocumentaciónAPI
+└──ESTRUCTURA-PROYECTO.md#Documentacióncompleta
 ```
 
 
 
 ---
 
-## 🔧 Solución de Problemas
+##🔧SolucióndeProblemas
 
-**Error de conexión MySQL:**
+**ErrordeconexiónMySQL:**
 ```powershell
-# Verificar servicio
-Get-Service MySQL*
+#Verificarservicio
+Get-ServiceMySQL*
 
-# Reiniciar si es necesario
-Restart-Service MySQL
+#Reiniciarsiesnecesario
+Restart-ServiceMySQL
 ```
 
-**Tablas no existen:**
+**Tablasnoexisten:**
 ```powershell
-node database/setup-database.js
+nodedatabase/setup-database.js
 ```
 
-**Módulos no encontrados:**
+**Módulosnoencontrados:**
 ```powershell
-npm install
+npminstall
 ```
 
 ---
 
-## 🎯 Datos Iniciales
+##🎯DatosIniciales
 
-- ✅ 5 Instituciones educativas
-- ✅ 9 Facultades
-- ✅ 6 Recursos de ayuda (líneas, sitios web)
-- ✅ 1 Administrador
-
----
-
-## 🔐 Seguridad
-
-- ✅ Passwords hasheados (bcrypt)
-- ✅ JWT con expiración
-- ✅ Prepared statements (SQL injection protection)
-- ✅ Middleware de autorización
-- ✅ Logs de auditoría
+-✅5Institucioneseducativas
+-✅9Facultades
+-✅6Recursosdeayuda(líneas,sitiosweb)
+-✅1Administrador
 
 ---
 
-## � Documentación
+##🔐Seguridad
 
-- **README.md** - Este archivo (inicio rápido)
-- **API-DOCS.md** - Documentación completa de la API
+-✅Passwordshasheados(bcrypt)
+-✅JWTconexpiración
+-✅Preparedstatements(SQLinjectionprotection)
+-✅Middlewaredeautorización
+-✅Logsdeauditoría
+
+---
+
+##�Documentación
+
+-**README.md**-Estearchivo(iniciorápido)
+-**API-DOCS.md**-DocumentacióncompletadelaAPI
 
 ---

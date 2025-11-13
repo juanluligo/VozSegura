@@ -1,4 +1,4 @@
-const bcrypt = require('bcryptjs');
+﻿const bcrypt = require('bcryptjs');
 const db = require('../config/database');
 
 async function actualizarPasswordAdmin() {
@@ -10,20 +10,20 @@ async function actualizarPasswordAdmin() {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    console.log('🔐 Hash generado:', hashedPassword);
+    console.log('Hash generado:', hashedPassword);
 
     // Actualizar en la base de datos
     const query = 'UPDATE usuarios SET password = ? WHERE email = ?';
     await db.query(query, [hashedPassword, email]);
 
-    console.log('✅ Contraseña actualizada exitosamente');
-    console.log('📧 Email:', email);
-    console.log('🔑 Password:', password);
-    console.log('\n🎯 Ahora puedes hacer login con estas credenciales');
+    console.log('Contraseña actualizada exitosamente');
+    console.log('Email:', email);
+    console.log('Password:', password);
+    console.log('\nAhora puedes hacer login con estas credenciales');
 
     process.exit(0);
   } catch (error) {
-    console.error('❌ Error:', error);
+    console.error('Error:', error);
     process.exit(1);
   }
 }

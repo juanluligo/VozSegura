@@ -39,31 +39,31 @@ function Login() {
     try {
       const data = await authService.login(loginData.email, loginData.password);
 
-      console.log('📝 Login response:', data);
-      console.log('📝 Usuario recibido:', JSON.stringify(data.usuario, null, 2));
+      console.log('Login response:', data);
+      console.log('Usuario recibido:', JSON.stringify(data.usuario, null, 2));
 
       if (data.success) {
-        console.log('💾 Guardando token y usuario...');
+        console.log('Guardando token y usuario...');
         localStorage.setItem('token', data.token);
         localStorage.setItem('usuario', JSON.stringify(data.usuario));
 
-        console.log('✅ Token guardado:', localStorage.getItem('token'));
-        console.log('✅ Usuario guardado:', localStorage.getItem('usuario'));
+        console.log('Token guardado:', localStorage.getItem('token'));
+        console.log('Usuario guardado:', localStorage.getItem('usuario'));
         
         const usuarioGuardado = JSON.parse(localStorage.getItem('usuario'));
-        console.log('✅ Usuario parseado:', usuarioGuardado);
-        console.log('✅ Rol del usuario:', usuarioGuardado.rol);
+        console.log('Usuario parseado:', usuarioGuardado);
+        console.log('Rol del usuario:', usuarioGuardado.rol);
 
         // Determinar destino según el rol
         const destino = data.usuario.rol === 'admin' ? '/dashboard' : '/mis-denuncias';
-        console.log('🔵 Redirigiendo a:', destino, '(rol:', data.usuario.rol, ')');
+        console.log('Redirigiendo a:', destino, '(rol:', data.usuario.rol, ')');
         
         // IMPORTANTE: NO usar navigate, usar window.location para forzar recarga completa
         setLoading(false);
         
         // Esperar un frame antes de redirigir
         requestAnimationFrame(() => {
-          console.log('🚀 Ejecutando redirección con window.location...');
+          console.log('Ejecutando redirección con window.location...');
           window.location.href = destino;
         });
         
@@ -72,7 +72,7 @@ function Login() {
         setError(data.message || 'Credenciales incorrectas');
       }
     } catch (err) {
-      console.error('❌ Error en login:', err);
+      console.error('Error en login:', err);
       setError('Error de conexión. Asegúrate de que el servidor esté corriendo.');
     } finally {
       setLoading(false);

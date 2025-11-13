@@ -74,7 +74,7 @@ app.get('*', (req, res) => {
         res.sendFile(path.join(clientBuildPath, 'index.html'));
     } else {
         res.status(200).send(`
-            <h1>🚀 Servidor Express corriendo</h1>
+            <h1>Servidor Express corriendo</h1>
             <p>La aplicación React no está construida aún.</p>
             <p>Para desarrollo: <code>cd client && npm run dev</code></p>
             <p>Para producción: <code>cd client && npm run build</code></p>
@@ -91,9 +91,9 @@ const iniciarServidor = async () => {
         await connectDB();
         
         app.listen(PORT, () => {
-            console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
-            console.log(`📂 Estructura MVC lista para desarrollo`);
-            console.log(`💾 Base de datos: ${process.env.DB_NAME || 'vozsegura'}`);
+            console.log(`Servidor corriendo en http://localhost:${PORT}`);
+            console.log(`Estructura MVC lista para desarrollo`);
+            console.log(`Base de datos: ${process.env.DB_NAME || 'vozsegura'}`);
         });
     } catch (error) {
         console.error('Error al iniciar el servidor:', error);

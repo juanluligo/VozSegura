@@ -23,15 +23,15 @@ exports.protect = async (req, res, next) => {
         // Verificar token
         const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secreto_temporal_cambiar');
 
-        console.log('🔑 Token decodificado:', decoded);
+        console.log('Token decodificado:', decoded);
 
         // Buscar usuario - SIEMPRE buscar en la tabla usuarios
         const usuario = await Usuario.buscarPorId(decoded.id);
 
-        console.log('👤 Usuario encontrado en BD:', usuario);
+        console.log('Usuario encontrado en BD:', usuario);
 
         if (!usuario) {
-            console.log('❌ Usuario no encontrado con ID:', decoded.id);
+            console.log('Usuario no encontrado con ID:', decoded.id);
             return res.status(401).json({
                 success: false,
                 message: 'Usuario no encontrado'
@@ -54,7 +54,7 @@ exports.protect = async (req, res, next) => {
             tipo: decoded.tipo
         };
 
-        console.log('✅ Usuario autenticado:', req.usuario);
+        console.log('Usuario autenticado:', req.usuario);
 
         next();
     } catch (error) {

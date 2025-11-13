@@ -23,11 +23,11 @@ function ProtectedRoute({ children, requireAuth = true, adminOnly = false }) {
       usuario = JSON.parse(usuarioStr);
     }
   } catch (error) {
-    console.error('❌ Error parseando usuario:', error);
+    console.error('Error parseando usuario:', error);
     localStorage.removeItem('usuario');
   }
 
-  console.log('🔒 ProtectedRoute - Verificando acceso en:', location.pathname, {
+  console.log('ProtectedRoute - Verificando acceso en:', location.pathname, {
     isAuthenticated,
     usuario,
     usuarioRol: usuario?.rol,
@@ -37,31 +37,31 @@ function ProtectedRoute({ children, requireAuth = true, adminOnly = false }) {
 
   // Verificar autenticación requerida
   if (requireAuth && !isAuthenticated) {
-    console.log('❌ No autenticado - Redirigiendo a login');
+    console.log('No autenticado - Redirigiendo a login');
     return <Navigate to="/login" replace />;
   }
 
   // Verificar permiso de admin
   if (adminOnly) {
     if (!usuario) {
-      console.log('❌ No hay usuario - Redirigiendo a login');
+      console.log('No hay usuario - Redirigiendo a login');
       return <Navigate to="/login" replace />;
     }
     
-    console.log('🔍 Verificando si es admin:', {
+    console.log('Verificando si es admin:', {
       rol: usuario.rol,
       esAdmin: usuario.rol === 'admin'
     });
     
     if (usuario.rol !== 'admin') {
-      console.log('❌ No es admin (rol:', usuario.rol, ') - Redirigiendo a mis-denuncias');
+      console.log('No es admin (rol:', usuario.rol, ') - Redirigiendo a mis-denuncias');
       return <Navigate to="/mis-denuncias" replace />;
     }
     
-    console.log('✅✅✅ ES ADMIN - ACCESO PERMITIDO AL DASHBOARD');
+    console.log('ES ADMIN - ACCESO PERMITIDO AL DASHBOARD');
   }
 
-  console.log('✅ Acceso permitido a:', location.pathname);
+  console.log('Acceso permitido a:', location.pathname);
   return children;
 }
 

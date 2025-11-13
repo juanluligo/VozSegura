@@ -46,7 +46,7 @@ function Dashboard() {
   const cargarDatos = async () => {
     setLoading(true);
     try {
-      console.log('🔵 Dashboard - Cargando datos...');
+      console.log('Dashboard - Cargando datos...');
       console.log('Token:', localStorage.getItem('token'));
       console.log('Usuario:', authService.getUsuarioActual());
       
@@ -56,7 +56,7 @@ function Dashboard() {
         denunciaService.obtenerTodas()
       ]);
 
-      console.log('✅ Datos cargados:', { statsData, denunciasData });
+      console.log('Datos cargados:', { statsData, denunciasData });
 
       if (statsData.success) {
         setEstadisticas(statsData.estadisticas);
@@ -66,7 +66,7 @@ function Dashboard() {
         setDenuncias(denunciasData.denuncias || []);
       }
     } catch (err) {
-      console.error('❌ Error cargando datos:', err);
+      console.error('Error cargando datos:', err);
       setError('Error al cargar las estadísticas');
     } finally {
       setLoading(false);

@@ -63,7 +63,7 @@ exports.login = async (req, res) => {
         // Buscar usuario
         const usuario = await Usuario.buscarPorEmail(email);
 
-        console.log('🔍 Usuario encontrado:', {
+        console.log('Usuario encontrado:', {
             id: usuario?.id,
             email: usuario?.email,
             nombre: usuario?.nombre,
@@ -112,7 +112,7 @@ exports.login = async (req, res) => {
             }
         };
 
-        console.log('✅ Respuesta de login:', JSON.stringify(respuesta, null, 2));
+        console.log('Respuesta de login:', JSON.stringify(respuesta, null, 2));
 
         res.status(200).json(respuesta);
 

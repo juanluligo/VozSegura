@@ -27,13 +27,13 @@ const connectDB = async () => {
         
         // Verificar conexión
         const connection = await pool.getConnection();
-        console.log('✅ MySQL conectado exitosamente');
-        console.log(`📊 Base de datos: ${process.env.DB_NAME || 'vozsegura'}`);
+        console.log('MySQL conectado exitosamente');
+        console.log(`Base de datos: ${process.env.DB_NAME || 'vozsegura'}`);
         connection.release();
         
         return pool;
     } catch (error) {
-        console.error('❌ Error al conectar MySQL:', error.message);
+        console.error('Error al conectar MySQL:', error.message);
         process.exit(1);
     }
 };

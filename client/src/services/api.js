@@ -26,15 +26,15 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    console.log('❌ Error en API:', error.response?.status, error.response?.data);
-    console.log('❌ Error completo:', error);
-    console.log('❌ URL que falló:', error.config?.url);
-    console.log('❌ Headers enviados:', error.config?.headers);
+    console.log('Error en API:', error.response?.status, error.response?.data);
+    console.log('Error completo:', error);
+    console.log('URL que falló:', error.config?.url);
+    console.log('Headers enviados:', error.config?.headers);
     
     if (error.response && error.response.status === 401) {
       // Token inválido o expirado
-      console.log('🚫 Error 401 - Token inválido');
-      console.log('🚫 Mensaje del servidor:', error.response.data);
+      console.log('Error 401 - Token inválido');
+      console.log('Mensaje del servidor:', error.response.data);
       // COMENTADO TEMPORALMENTE PARA DEBUG
       // localStorage.removeItem('token');
       // localStorage.removeItem('usuario');
@@ -53,12 +53,12 @@ export const authService = {
 
   registro: async (nombre, email, password, rol = 'estudiante') => {
     try {
-      console.log('🔵 Intentando registro:', { nombre, email, rol });
+      console.log('Intentando registro:', { nombre, email, rol });
       const response = await api.post('/auth/registro', { nombre, email, password, rol });
-      console.log('✅ Registro exitoso:', response.data);
+      console.log('Registro exitoso:', response.data);
       return response.data;
     } catch (error) {
-      console.error('❌ Error en registro:', error);
+      console.error('Error en registro:', error);
       console.error('Response:', error.response?.data);
       throw error;
     }

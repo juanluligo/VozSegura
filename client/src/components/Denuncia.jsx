@@ -81,7 +81,7 @@ function Denuncia() {
       const data = await denunciaService.crear(denunciaData);
 
       if (data.success) {
-        alert(`✅ ¡Denuncia enviada exitosamente!\n\nCódigo de seguimiento: ${data.codigo}\n\n⚠️ GUARDA ESTE CÓDIGO para consultar el estado de tu denuncia.`);
+        alert(`Denuncia enviada exitosamente!\n\nCódigo de seguimiento: ${data.codigo}\n\nGUARDA ESTE CÓDIGO para consultar el estado de tu denuncia.`);
         
         // Limpiar formulario
         setFormData({

@@ -18,10 +18,10 @@ function VerDatos() {
     setError('');
 
     try {
-      console.log('🔵 VerDatos - Cargando denuncias...');
+      console.log('VerDatos - Cargando denuncias...');
       const data = await denunciaService.obtenerTodas();
       
-      console.log('✅ Denuncias cargadas:', data);
+      console.log('Denuncias cargadas:', data);
 
       if (data.success) {
         setDenuncias(data.denuncias || []);
@@ -29,7 +29,7 @@ function VerDatos() {
         throw new Error(data.message || 'Error al cargar denuncias');
       }
     } catch (err) {
-      console.error('❌ Error cargando denuncias:', err);
+      console.error('Error cargando denuncias:', err);
       setError(err.message || 'Error al cargar los datos');
     } finally {
       setLoading(false);
@@ -61,7 +61,7 @@ function VerDatos() {
 
         {loading && <div className="loading">Cargando datos...</div>}
 
-        {error && <div className="error">❌ Error: {error}</div>}
+        {error && <div className="error">Error: {error}</div>}
 
         {!loading && !error && (
           <>
