@@ -35,11 +35,25 @@ exports.crearDenuncia = async (req, res) => {
             facultad_id
         });
 
+        // Si hay archivos adjuntos, guardarlos
+        if (req.files && req.files.length > 0) {
+            for (const file of req.files) {
+                await Denuncia.agregarArchivo(denuncia.id, {
+                    nombre_original: file.originalname,
+                    nombre_archivo: file.filename,
+                    ruta: file.path,
+                    tipo: file.mimetype,
+                    tamaño: file.size
+                });
+            }
+        }
+
         res.status(201).json({
             success: true,
             message: 'Denuncia creada exitosamente',
             codigo: denuncia.codigo,
-            denuncia
+            denuncia,
+            archivos_subidos: req.files ? req.files.length : 0
         });
 
     } catch (error) {
@@ -331,6 +345,30 @@ exports.asignarRecursos = async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Error al asignar recursos',
+            error: error.message
+        });
+    }
+};
+
+// @desc    Obtener archivos de una denuncia
+// @route   GET /api/denuncias/:id/archivos
+// @access  Private
+exports.obtenerArchivos = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const archivos = await Denuncia.obtenerArchivos(id);
+
+        res.status(200).json({
+            success: true,
+            archivos
+        });
+
+    } catch (error) {
+        console.error('Error al obtener archivos:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error al obtener archivos',
             error: error.message
         });
     }

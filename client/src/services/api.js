@@ -86,8 +86,38 @@ export const denunciaService = {
     return response.data;
   },
 
+  crearConArchivos: async (denunciaData, archivos) => {
+    const formData = new FormData();
+    
+    // Agregar datos de la denuncia
+    formData.append('tipo', denunciaData.tipo);
+    formData.append('descripcion', denunciaData.descripcion);
+    formData.append('fecha', denunciaData.fecha);
+    formData.append('gravedad', denunciaData.gravedad);
+    formData.append('facultad_id', denunciaData.facultad_id);
+    
+    // Agregar archivos
+    if (archivos && archivos.length > 0) {
+      for (let i = 0; i < archivos.length; i++) {
+        formData.append('archivos', archivos[i]);
+      }
+    }
+
+    const response = await api.post('/denuncias', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    return response.data;
+  },
+
   obtenerTodas: async () => {
-    const response = await api.get('/denuncias');
+    const response = await api.get('/denuncias/todas');
+    return response.data;
+  },
+
+  obtenerArchivos: async (denunciaId) => {
+    const response = await api.get(`/denuncias/${denunciaId}/archivos`);
     return response.data;
   },
 
@@ -131,6 +161,39 @@ export const catalogoService = {
 
   getInstituciones: async () => {
     const response = await api.get('/catalogo/instituciones');
+    return response.data;
+  }
+};
+
+// Servicios de usuarios (Admin)
+export const usuarioService = {
+  obtenerTodos: async () => {
+    const response = await api.get('/auth/usuarios');
+    return response.data;
+  },
+
+  obtenerPorId: async (id) => {
+    const response = await api.get(`/auth/usuarios/${id}`);
+    return response.data;
+  },
+
+  crear: async (usuarioData) => {
+    const response = await api.post('/auth/usuarios', usuarioData);
+    return response.data;
+  },
+
+  actualizar: async (id, usuarioData) => {
+    const response = await api.put(`/auth/usuarios/${id}`, usuarioData);
+    return response.data;
+  },
+
+  eliminar: async (id) => {
+    const response = await api.delete(`/auth/usuarios/${id}`);
+    return response.data;
+  },
+
+  cambiarEstado: async (id, activo) => {
+    const response = await api.patch(`/auth/usuarios/${id}/estado`, { activo });
     return response.data;
   }
 };

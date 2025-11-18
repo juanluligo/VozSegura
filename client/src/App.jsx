@@ -7,6 +7,7 @@ import VerDatos from './components/VerDatos';
 import ConsultarDenuncia from './components/ConsultarDenuncia';
 import MisDenuncias from './components/MisDenuncias';
 import Dashboard from './components/Dashboard';
+import Usuarios from './components/Usuarios';
 
 // Componente para rutas protegidas - VERSIÓN SÍNCRONA
 function ProtectedRoute({ children, requireAuth = true, adminOnly = false }) {
@@ -106,6 +107,14 @@ function App() {
           element={
             <ProtectedRoute adminOnly={true}>
               <VerDatos />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/usuarios"
+          element={
+            <ProtectedRoute adminOnly={true}>
+              <Usuarios />
             </ProtectedRoute>
           }
         />

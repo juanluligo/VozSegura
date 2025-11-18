@@ -199,14 +199,31 @@ class Denuncia {
     // Agregar archivo a denuncia
     static async agregarArchivo(denuncia_id, archivo) {
         try {
-            const { nombre, tipo, ruta, tamano_kb } = archivo;
+            const { nombre_original, nombre_archivo, ruta, tipo, tamaño } = archivo;
+            
+            // Convertir tamaño de bytes a KB
+            const tamano_kb = tamaño ? Math.round(tamaño / 1024) : 0;
             
             const resultado = await query(
                 'INSERT INTO archivos (denuncia_id, nombre, tipo, ruta, tamano_kb) VALUES (?, ?, ?, ?, ?)',
-                [denuncia_id, nombre, tipo, ruta, tamano_kb || 0]
+                [denuncia_id, nombre_original, tipo, ruta, tamano_kb]
             );
             
             return { id: resultado.insertId, ...archivo };
+        } catch (error) {
+            throw error;
+        }
+    }
+    
+    // Obtener archivos de una denuncia
+    static async obtenerArchivos(denuncia_id) {
+        try {
+            const archivos = await query(
+                'SELECT id, denuncia_id, nombre as nombre_original, tipo, ruta, tamano_kb, fecha as fecha_subida FROM archivos WHERE denuncia_id = ? ORDER BY fecha DESC',
+                [denuncia_id]
+            );
+            
+            return archivos;
         } catch (error) {
             throw error;
         }

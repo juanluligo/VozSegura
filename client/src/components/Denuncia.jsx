@@ -10,6 +10,8 @@ function Denuncia() {
   const [loadingFacultades, setLoadingFacultades] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [archivos, setArchivos] = useState([]);
+  const [previews, setPreviews] = useState([]);
 
   const [formData, setFormData] = useState({
     descripcion: '',
@@ -47,6 +49,66 @@ function Denuncia() {
     }
   };
 
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+    
+    // Validar número de archivos
+    if (archivos.length + files.length > 5) {
+      setError('Máximo 5 archivos permitidos');
+      return;
+    }
+
+    // Validar tamaño de archivos
+    const maxSize = 50 * 1024 * 1024; // 50MB
+    for (const file of files) {
+      if (file.size > maxSize) {
+        setError(`El archivo ${file.name} excede el tamaño máximo de 50MB`);
+        return;
+      }
+    }
+
+    // Validar tipos de archivo
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'video/mp4', 'video/quicktime', 'video/x-msvideo', 'video/x-matroska', 'application/pdf'];
+    for (const file of files) {
+      if (!allowedTypes.includes(file.type)) {
+        setError(`El archivo ${file.name} no es un tipo permitido. Solo se aceptan imágenes, videos o PDF.`);
+        return;
+      }
+    }
+
+    // Agregar archivos
+    const newArchivos = [...archivos, ...files];
+    setArchivos(newArchivos);
+
+    // Crear previews
+    const newPreviews = [...previews];
+    files.forEach(file => {
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          newPreviews.push({ type: 'image', url: e.target.result, name: file.name });
+          setPreviews([...newPreviews]);
+        };
+        reader.readAsDataURL(file);
+      } else if (file.type.startsWith('video/')) {
+        newPreviews.push({ type: 'video', name: file.name });
+        setPreviews([...newPreviews]);
+      } else {
+        newPreviews.push({ type: 'file', name: file.name });
+        setPreviews([...newPreviews]);
+      }
+    });
+
+    setError('');
+  };
+
+  const eliminarArchivo = (index) => {
+    const newArchivos = archivos.filter((_, i) => i !== index);
+    const newPreviews = previews.filter((_, i) => i !== index);
+    setArchivos(newArchivos);
+    setPreviews(newPreviews);
+  };
+
   const handleSubmit = async () => {
     setError('');
 
@@ -78,10 +140,20 @@ function Denuncia() {
         anonima: !token
       };
 
-      const data = await denunciaService.crear(denunciaData);
+      let data;
+      if (archivos.length > 0) {
+        // Usar el servicio con archivos
+        data = await denunciaService.crearConArchivos(denunciaData, archivos);
+      } else {
+        // Usar el servicio normal
+        data = await denunciaService.crear(denunciaData);
+      }
 
       if (data.success) {
-        alert(`Denuncia enviada exitosamente!\n\nCódigo de seguimiento: ${data.codigo}\n\nGUARDA ESTE CÓDIGO para consultar el estado de tu denuncia.`);
+        const mensajeArchivos = data.archivos_subidos > 0 
+          ? `\n\n${data.archivos_subidos} archivo(s) adjuntado(s) correctamente.` 
+          : '';
+        alert(`Denuncia enviada exitosamente!${mensajeArchivos}\n\nCódigo de seguimiento: ${data.codigo}\n\nGUARDA ESTE CÓDIGO para consultar el estado de tu denuncia.`);
         
         // Limpiar formulario
         setFormData({
@@ -91,6 +163,8 @@ function Denuncia() {
           gravedad: 'media'
         });
         setTipoSeleccionado('Acoso verbal');
+        setArchivos([]);
+        setPreviews([]);
 
         // Preguntar si quiere hacer otra denuncia
         const otraDenuncia = window.confirm('¿Deseas reportar otro incidente?');
@@ -204,6 +278,65 @@ function Denuncia() {
             <option value="media">Media</option>
             <option value="alta">Alta</option>
           </select>
+
+          {/* Sección de archivos adjuntos */}
+          <div style={{ marginTop: '20px' }}>
+            <label htmlFor="archivos">
+              <i className="fas fa-paperclip"></i> Adjuntar evidencia (opcional)
+            </label>
+            <p style={{ fontSize: '0.85em', color: '#666', marginBottom: '10px' }}>
+              Puedes adjuntar fotos, videos o documentos (Máximo 5 archivos, 50MB cada uno)
+            </p>
+            
+            <div className="file-upload-container">
+              <input
+                type="file"
+                id="archivos"
+                multiple
+                accept="image/*,video/*,.pdf"
+                onChange={handleFileChange}
+                style={{ display: 'none' }}
+              />
+              <label htmlFor="archivos" className="file-upload-btn">
+                <i className="fas fa-cloud-upload-alt"></i>
+                Seleccionar archivos
+              </label>
+              <span className="file-count">
+                {archivos.length > 0 ? `${archivos.length} archivo(s) seleccionado(s)` : 'Ningún archivo seleccionado'}
+              </span>
+            </div>
+
+            {/* Previsualizaciones de archivos */}
+            {previews.length > 0 && (
+              <div className="files-preview">
+                {previews.map((preview, index) => (
+                  <div key={index} className="file-preview-item">
+                    {preview.type === 'image' ? (
+                      <img src={preview.url} alt={preview.name} />
+                    ) : preview.type === 'video' ? (
+                      <div className="video-preview">
+                        <i className="fas fa-file-video"></i>
+                        <span>{preview.name}</span>
+                      </div>
+                    ) : (
+                      <div className="file-preview-doc">
+                        <i className="fas fa-file-pdf"></i>
+                        <span>{preview.name}</span>
+                      </div>
+                    )}
+                    <button
+                      type="button"
+                      className="remove-file-btn"
+                      onClick={() => eliminarArchivo(index)}
+                      title="Eliminar archivo"
+                    >
+                      <i className="fas fa-times"></i>
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </section>
 
         <section className="info-box">

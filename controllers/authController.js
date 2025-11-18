@@ -325,3 +325,265 @@ exports.crearAdminInicial = async (req, res) => {
         });
     }
 };
+
+// ============================================
+// CRUD DE USUARIOS (Solo Admin)
+// ============================================
+
+// @desc    Obtener todos los usuarios
+// @route   GET /api/auth/usuarios
+// @access  Private (Admin)
+exports.obtenerUsuarios = async (req, res) => {
+    try {
+        const usuarios = await Usuario.obtenerTodos();
+        
+        res.status(200).json({
+            success: true,
+            total: usuarios.length,
+            usuarios: usuarios.map(u => ({
+                id: u.id,
+                nombre: u.nombre,
+                email: u.email,
+                rol: u.rol,
+                activo: u.activo,
+                fecha_registro: u.fecha_registro
+            }))
+        });
+    } catch (error) {
+        console.error('Error al obtener usuarios:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error al obtener usuarios',
+            error: error.message
+        });
+    }
+};
+
+// @desc    Obtener usuario por ID
+// @route   GET /api/auth/usuarios/:id
+// @access  Private (Admin)
+exports.obtenerUsuarioPorId = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const usuario = await Usuario.buscarPorId(id);
+
+        if (!usuario) {
+            return res.status(404).json({
+                success: false,
+                message: 'Usuario no encontrado'
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            usuario: {
+                id: usuario.id,
+                nombre: usuario.nombre,
+                email: usuario.email,
+                rol: usuario.rol,
+                activo: usuario.activo,
+                fecha_registro: usuario.fecha_registro
+            }
+        });
+    } catch (error) {
+        console.error('Error al obtener usuario:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error al obtener usuario',
+            error: error.message
+        });
+    }
+};
+
+// @desc    Crear nuevo usuario (Admin)
+// @route   POST /api/auth/usuarios
+// @access  Private (Admin)
+exports.crearUsuario = async (req, res) => {
+    try {
+        const { nombre, email, password, rol } = req.body;
+
+        // Validar datos requeridos
+        if (!nombre || !email || !password) {
+            return res.status(400).json({
+                success: false,
+                message: 'Por favor proporciona nombre, email y password'
+            });
+        }
+
+        // Verificar que el email no exista
+        const usuarioExistente = await Usuario.buscarPorEmail(email);
+        if (usuarioExistente) {
+            return res.status(400).json({
+                success: false,
+                message: 'El email ya está registrado'
+            });
+        }
+
+        // Crear usuario
+        const usuario = await Usuario.crear({
+            nombre,
+            email,
+            password,
+            rol: rol || 'estudiante'
+        });
+
+        res.status(201).json({
+            success: true,
+            message: 'Usuario creado exitosamente',
+            usuario: {
+                id: usuario.id,
+                nombre: usuario.nombre,
+                email: usuario.email,
+                rol: usuario.rol || 'estudiante'
+            }
+        });
+    } catch (error) {
+        console.error('Error al crear usuario:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error al crear usuario',
+            error: error.message
+        });
+    }
+};
+
+// @desc    Actualizar usuario
+// @route   PUT /api/auth/usuarios/:id
+// @access  Private (Admin)
+exports.actualizarUsuario = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { nombre, email, rol, activo } = req.body;
+
+        // Verificar que el usuario existe
+        const usuario = await Usuario.buscarPorId(id);
+        if (!usuario) {
+            return res.status(404).json({
+                success: false,
+                message: 'Usuario no encontrado'
+            });
+        }
+
+        // Si se está cambiando el email, verificar que no exista
+        if (email && email !== usuario.email) {
+            const emailExiste = await Usuario.buscarPorEmail(email);
+            if (emailExiste) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'El email ya está en uso'
+                });
+            }
+        }
+
+        // Actualizar usuario
+        const usuarioActualizado = await Usuario.actualizar(id, {
+            nombre,
+            email,
+            rol,
+            activo
+        });
+
+        res.status(200).json({
+            success: true,
+            message: 'Usuario actualizado exitosamente',
+            usuario: usuarioActualizado
+        });
+    } catch (error) {
+        console.error('Error al actualizar usuario:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error al actualizar usuario',
+            error: error.message
+        });
+    }
+};
+
+// @desc    Eliminar usuario
+// @route   DELETE /api/auth/usuarios/:id
+// @access  Private (Admin)
+exports.eliminarUsuario = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Verificar que el usuario existe
+        const usuario = await Usuario.buscarPorId(id);
+        if (!usuario) {
+            return res.status(404).json({
+                success: false,
+                message: 'Usuario no encontrado'
+            });
+        }
+
+        // No permitir eliminar al usuario actual (admin)
+        if (parseInt(id) === req.usuario.id) {
+            return res.status(400).json({
+                success: false,
+                message: 'No puedes eliminar tu propia cuenta'
+            });
+        }
+
+        // Eliminar usuario
+        await Usuario.eliminar(id);
+
+        res.status(200).json({
+            success: true,
+            message: 'Usuario eliminado exitosamente'
+        });
+    } catch (error) {
+        console.error('Error al eliminar usuario:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error al eliminar usuario',
+            error: error.message
+        });
+    }
+};
+
+// @desc    Cambiar estado del usuario (activo/inactivo)
+// @route   PATCH /api/auth/usuarios/:id/estado
+// @access  Private (Admin)
+exports.cambiarEstadoUsuario = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { activo } = req.body;
+
+        if (typeof activo !== 'boolean') {
+            return res.status(400).json({
+                success: false,
+                message: 'El campo activo debe ser true o false'
+            });
+        }
+
+        // Verificar que el usuario existe
+        const usuario = await Usuario.buscarPorId(id);
+        if (!usuario) {
+            return res.status(404).json({
+                success: false,
+                message: 'Usuario no encontrado'
+            });
+        }
+
+        // No permitir desactivar al usuario actual
+        if (parseInt(id) === req.usuario.id) {
+            return res.status(400).json({
+                success: false,
+                message: 'No puedes cambiar tu propio estado'
+            });
+        }
+
+        // Cambiar estado
+        await Usuario.cambiarEstado(id, activo);
+
+        res.status(200).json({
+            success: true,
+            message: `Usuario ${activo ? 'activado' : 'desactivado'} exitosamente`
+        });
+    } catch (error) {
+        console.error('Error al cambiar estado:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error al cambiar estado del usuario',
+            error: error.message
+        });
+    }
+};

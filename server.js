@@ -23,6 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 // Servir archivos estáticos (HTML, CSS, JS, imágenes)
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Servir la aplicación React en producción
 const clientBuildPath = path.join(__dirname, 'client', 'dist');

@@ -87,7 +87,7 @@ class Usuario {
     static async obtenerTodos() {
         try {
             const usuarios = await query(
-                'SELECT id, nombre, email, fecha_registro, activo FROM usuarios ORDER BY fecha_registro DESC'
+                'SELECT id, nombre, email, rol, fecha_registro, activo FROM usuarios ORDER BY fecha_registro DESC'
             );
             return usuarios;
         } catch (error) {
@@ -98,14 +98,63 @@ class Usuario {
     // Actualizar usuario
     static async actualizar(id, datos) {
         try {
-            const { nombre, email } = datos;
+            const { nombre, email, rol, activo } = datos;
+            
+            const campos = [];
+            const valores = [];
+            
+            if (nombre !== undefined) {
+                campos.push('nombre = ?');
+                valores.push(nombre);
+            }
+            if (email !== undefined) {
+                campos.push('email = ?');
+                valores.push(email);
+            }
+            if (rol !== undefined) {
+                campos.push('rol = ?');
+                valores.push(rol);
+            }
+            if (activo !== undefined) {
+                campos.push('activo = ?');
+                valores.push(activo);
+            }
+            
+            if (campos.length === 0) {
+                throw new Error('No hay campos para actualizar');
+            }
+            
+            valores.push(id);
             
             await query(
-                'UPDATE usuarios SET nombre = ?, email = ? WHERE id = ?',
-                [nombre, email, id]
+                `UPDATE usuarios SET ${campos.join(', ')} WHERE id = ?`,
+                valores
             );
             
             return await this.buscarPorId(id);
+        } catch (error) {
+            throw error;
+        }
+    }
+    
+    // Eliminar usuario
+    static async eliminar(id) {
+        try {
+            await query('DELETE FROM usuarios WHERE id = ?', [id]);
+            return { mensaje: 'Usuario eliminado exitosamente' };
+        } catch (error) {
+            throw error;
+        }
+    }
+    
+    // Cambiar estado del usuario
+    static async cambiarEstado(id, activo) {
+        try {
+            await query(
+                'UPDATE usuarios SET activo = ? WHERE id = ?',
+                [activo, id]
+            );
+            return { mensaje: `Usuario ${activo ? 'activado' : 'desactivado'} exitosamente` };
         } catch (error) {
             throw error;
         }

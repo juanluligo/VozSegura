@@ -212,6 +212,10 @@ function Dashboard() {
               <i className="fas fa-database"></i>
               Ver Datos
             </Link>
+            <Link to="/usuarios" className="nav-link">
+              <i className="fas fa-users"></i>
+              Usuarios
+            </Link>
             <div className="user-info">
               <i className="fas fa-user-circle"></i>
               <span>{usuario?.nombre}</span>
