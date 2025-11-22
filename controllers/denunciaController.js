@@ -25,13 +25,16 @@ exports.crearDenuncia = async (req, res) => {
             });
         }
 
+        // Obtener usuario_id (null si es denuncia anónima)
+        const usuario_id = req.usuario ? req.usuario.id : null;
+
         // Crear denuncia
         const denuncia = await Denuncia.crear({
             tipo,
             descripcion,
             fecha,
             gravedad: gravedad || 'media',
-            usuario_id: req.usuario.id,
+            usuario_id,
             facultad_id
         });
 

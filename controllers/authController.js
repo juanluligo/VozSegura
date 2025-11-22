@@ -326,9 +326,8 @@ exports.crearAdminInicial = async (req, res) => {
     }
 };
 
-// ============================================
 // CRUD DE USUARIOS (Solo Admin)
-// ============================================
+
 
 // @desc    Obtener todos los usuarios
 // @route   GET /api/auth/usuarios

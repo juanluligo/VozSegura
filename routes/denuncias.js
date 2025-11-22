@@ -16,7 +16,7 @@ const {
     eliminarDenuncia,
     obtenerArchivos
 } = require('../controllers/denunciaController');
-const { protect, isAdmin } = require('../middleware/auth');
+const { protect, isAdmin, optionalAuth } = require('../middleware/auth');
 
 // Configuración de Multer para subida de archivos
 const storage = multer.diskStorage({
@@ -60,7 +60,7 @@ router.get('/mis-denuncias', protect, misDenuncias);
 router.get('/estadisticas/general', protect, isAdmin, obtenerEstadisticas);
 
 // Rutas con archivos
-router.post('/', protect, upload.array('archivos', 5), crearDenuncia);
+router.post('/', optionalAuth, upload.array('archivos', 5), crearDenuncia);
 router.get('/:id/archivos', protect, obtenerArchivos);
 
 // Rutas con parámetro :id (deben ir AL FINAL)
