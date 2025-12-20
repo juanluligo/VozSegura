@@ -410,7 +410,7 @@ sudo -u www-data php /var/www/html/moodle/admin/cli/upgrade.php
 
 #### Configuración en VozSegura
 
-Editar `/home/runner/work/VozSegura/VozSegura/server.js`:
+Editar `/var/www/VozSegura/server.js` (o la ruta donde instalaste VozSegura):
 
 ```javascript
 // Agregar endpoint de autenticación SSO
