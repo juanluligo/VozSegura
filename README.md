@@ -2,6 +2,8 @@
 
 **Plataforma web completa para gestión de denuncias universitarias con sistema de seguimiento, atenciones y recursos de ayuda.**
 
+> 📚 **¿Necesitas integrar VozSegura con Moodle?** Consulta la [Guía de Integración con Moodle](GUIA_MOODLE_INTEGRACION.md)
+
 ## 📋 Descripción
 
 VozSegura es una aplicación full-stack que permite a usuarios realizar denuncias de manera segura y confidencial, con soporte para denuncias anónimas. Los administradores pueden gestionar, dar seguimiento y asignar recursos de ayuda a cada caso.
@@ -442,6 +444,22 @@ Si tienes algún problema o pregunta:
 - [ ] Dashboard con gráficos avanzados
 - [ ] Sistema de roles más granular
 - [ ] Integración con sistemas de email
+
+---
+
+## 🎓 Integración con Moodle
+
+¿Tu institución utiliza Moodle? VozSegura puede integrarse perfectamente con tu plataforma LMS. 
+
+👉 **[Ver Guía Completa de Integración con Moodle](GUIA_MOODLE_INTEGRACION.md)**
+
+La guía incluye:
+- ✅ Instalación y configuración de Moodle desde cero
+- ✅ 3 opciones de integración (enlace externo, plugin, SSO)
+- ✅ Configuración de Single Sign-On (SSO) con JWT
+- ✅ Scripts de mantenimiento y backup
+- ✅ Casos de uso y mejores prácticas
+- ✅ Soporte técnico y solución de problemas
 
 ---
 
