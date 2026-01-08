@@ -117,7 +117,7 @@ Sistema web completo que permite:
 <div align="center">
 
 ### Página de Inicio
-<img src="assets/screenshot-home.png" alt="Home" width="700px" />
+<img width="1919" height="931" alt="image" src="https://github.com/user-attachments/assets/25c0ef79-d8de-4419-8003-6f0cc4fa2368" />
 
 ### Dashboard Administrativo
 <img src="assets/screenshot-dashboard.png" alt="Dashboard" width="700px" />
