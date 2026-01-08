@@ -1,29 +1,188 @@
-# 🎯 VozSegura - Sistema de Denuncias
+<div align="center">
 
-**Plataforma web completa para gestión de denuncias universitarias con sistema de seguimiento, atenciones y recursos de ayuda.**
+# 🛡️ VozSegura
 
-## 📋 Descripción
+### Sistema Integral de Gestión de Denuncias Institucionales
 
-VozSegura es una aplicación full-stack que permite a usuarios realizar denuncias de manera segura y confidencial, con soporte para denuncias anónimas. Los administradores pueden gestionar, dar seguimiento y asignar recursos de ayuda a cada caso.
+[![Status](https://img.shields.io/badge/status-active-success.svg)](https://github.com/juanluligo/vozsegura)
+[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/juanluligo/vozsegura)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Node](https://img.shields.io/badge/node-%3E%3D16.0.0-brightgreen.svg)](https://nodejs.org/)
+[![React](https://img.shields.io/badge/react-19.1.1-61dafb.svg)](https://reactjs.org/)
 
-### 🛠️ Tecnologías
+**[🚀 Ver Demo](#) • [📖 Documentación](MANUAL_USUARIO.md) • [🎥 Video Demo](#) • [🐛 Reportar Bug](#)**
 
-- **Frontend:** React 18 + Vite
-- **Backend:** Node.js + Express
-- **Base de Datos:** MySQL 8.0
-- **Autenticación:** JWT (JSON Web Tokens)
-- **Seguridad:** Bcrypt, CORS, Helmet
+---
 
-### ✨ Características Principales
+<img src="assets/screenshot-home.png" alt="VozSegura Home" width="800px" />
 
-✅ **Registro y autenticación** de usuarios y administradores  
-✅ **Denuncias con código único** y seguimiento completo  
-✅ **Denuncias anónimas** disponibles  
-✅ **Dashboard administrativo** con estadísticas en tiempo real  
-✅ **Atenciones profesionales** (psicológica, legal, social)  
-✅ **Recursos de ayuda** asignables a denuncias  
-✅ **Historial de seguimiento** detallado  
-✅ **Base de datos optimizada** con vistas y procedimientos almacenados  
+*Plataforma web completa para la gestión segura y confidencial de denuncias en instituciones educativas*
+
+</div>
+
+---
+
+## 📋 Sobre el Proyecto
+
+**VozSegura** es una aplicación **full-stack** diseñada para facilitar la gestión de denuncias en instituciones educativas, garantizando la **confidencialidad**, **seguridad** y **seguimiento efectivo** de cada caso.
+
+### 🎯 Problema que Resuelve
+
+Las instituciones educativas necesitan un sistema **confiable** y **seguro** para:
+- Recibir denuncias de forma confidencial o anónima
+- Gestionar casos con seguimiento profesional
+- Proporcionar recursos de ayuda inmediatos
+- Generar estadísticas para toma de decisiones
+- Mantener la privacidad de los denunciantes
+
+### 💡 Solución
+
+Sistema web completo que permite:
+- ✅ Denuncias con **código único** para seguimiento anónimo
+- ✅ **Dashboard administrativo** con estadísticas en tiempo real
+- ✅ Asignación de **atenciones profesionales** (psicológica, legal, social)
+- ✅ **Recursos de ayuda** disponibles 24/7
+- ✅ **Historial detallado** de cada caso
+- ✅ **Base de datos optimizada** con 50+ vistas y 40+ procedimientos almacenados
+
+---
+
+## 🛠️ Stack Tecnológico
+
+<div align="center">
+
+### Frontend
+![React](https://img.shields.io/badge/React-19.1.1-61DAFB?style=for-the-badge&logo=react&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-5.0-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![React Router](https://img.shields.io/badge/React_Router-7.9.4-CA4245?style=for-the-badge&logo=react-router&logoColor=white)
+![Chart.js](https://img.shields.io/badge/Chart.js-4.5.1-FF6384?style=for-the-badge&logo=chart.js&logoColor=white)
+![Axios](https://img.shields.io/badge/Axios-1.12.2-5A29E4?style=for-the-badge&logo=axios&logoColor=white)
+
+### Backend
+![Node.js](https://img.shields.io/badge/Node.js-16+-339933?style=for-the-badge&logo=node.js&logoColor=white)
+![Express](https://img.shields.io/badge/Express-4.18.2-000000?style=for-the-badge&logo=express&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-9.0.2-000000?style=for-the-badge&logo=json-web-tokens&logoColor=white)
+![Bcrypt](https://img.shields.io/badge/Bcrypt-2.4.3-3C873A?style=for-the-badge)
+
+</div>
+
+---
+
+## ✨ Características Principales## ✨ Características Principales
+
+<table>
+<tr>
+<td width="50%">
+
+### 👥 Para Usuarios
+- 🔐 **Registro y autenticación** segura
+- 📝 **Crear denuncias** con evidencia adjunta
+- 🕵️ **Denuncias anónimas** sin registro
+- 🔍 **Consultar estado** con código único
+- 📊 **Ver historial** completo de cada caso
+- 📱 **Diseño responsive** - móvil y desktop
+- 🔔 **Notificaciones** de cambios de estado
+
+</td>
+<td width="50%">
+
+### 👨‍💼 Para Administradores
+- 📈 **Dashboard** con estadísticas en tiempo real
+- 🎯 **Gestión completa** de denuncias
+- ✍️ **Seguimiento detallado** de cada caso
+- 👥 **Gestión de usuarios** y permisos
+- 📊 **Gráficos interactivos** con Chart.js
+- 🆘 **Asignar recursos** de ayuda
+- 🔍 **Filtros avanzados** y búsqueda
+
+</td>
+</tr>
+</table>
+
+### 🔥 Funcionalidades Avanzadas
+
+- **Sistema de Código Único**: Cada denuncia genera un código para seguimiento anónimo
+- **Atenciones Profesionales**: Registro de sesiones psicológicas, legales y sociales
+- **Recursos de Ayuda**: Líneas de emergencia, guías y contactos disponibles 24/7
+- **Base de Datos Optimizada**: 50+ vistas SQL y 40+ procedimientos almacenados
+- **Auditoría Completa**: Log automático de todas las acciones del sistema
+- **Niveles de Gravedad**: Clasificación automática (baja, media, alta, urgente)
+- **Estados de Seguimiento**: Recibida → En Proceso → Resuelta/Archivada
+
+---
+
+## 📸 Capturas de Pantalla
+
+<div align="center">
+
+### Página de Inicio
+<img src="assets/screenshot-home.png" alt="Home" width="700px" />
+
+### Dashboard Administrativo
+<img src="assets/screenshot-dashboard.png" alt="Dashboard" width="700px" />
+
+### Formulario de Denuncia
+<img src="assets/screenshot-denuncia.png" alt="Nueva Denuncia" width="700px" />
+
+### Seguimiento de Caso
+<img src="assets/screenshot-seguimiento.png" alt="Seguimiento" width="700px" />
+
+</div>
+
+---
+
+## 🚀 Demo en Vivo
+
+🌐 **[Ver Aplicación en Vivo](#)** *(Próximamente)*
+
+🎥 **[Video Demostración](#)** *(Próximamente)*
+
+### Credenciales de Prueba
+
+```
+👤 Administrador:
+Email: admin@vozsegura.com
+Password: Admin123!
+
+👤 Usuario Demo:
+Regístrate o crea una denuncia anónima
+```
+
+---
+
+## ⚡ Inicio Rápido
+
+### Requisitos Previos
+
+```bash
+Node.js >= 16.0.0
+MySQL >= 8.0
+npm o yarn
+```
+
+### Instalación en 3 Pasos
+
+```bash
+# 1. Clonar el repositorio
+git clone https://github.com/juanluligo/vozsegura.git
+cd vozsegura
+
+# 2. Configurar variables de entorno
+cp .env.example .env
+# Edita .env con tus credenciales de MySQL
+
+# 3. Instalar y ejecutar
+npm install
+npm run setup-db    # Configura la base de datos
+npm start           # Inicia backend y frontend
+```
+
+✅ **Aplicación corriendo en:**
+- Frontend: http://localhost:5173
+- Backend: http://localhost:3000
+
+📖 **[Ver Guía de Instalación Completa](#-instalación-y-configuración)**
 
 ---
 

@@ -9,7 +9,11 @@
     "setup-db": "node database/setup-database.js",
     "test-db": "node database/test-connection.js",
     "client": "cd client && npm run dev",
-    "build": "cd client && npm run build",
+    "build": "cd client && npm install && npm run build",
+    "postinstall": "cd client && npm install",
+    "deploy": "npm install && npm run build && npm start",
+    "pre-deploy": "node scripts/pre-deploy-check.js",
+    "vercel-build": "npm install && cd client && npm install && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
