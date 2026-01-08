@@ -143,7 +143,7 @@ Sistema web completo que permite:
 ```
 👤 Administrador:
 Email: admin@vozsegura.com
-Password: Admin123!
+Password: admin123
 
 👤 Usuario Demo:
 Regístrate o crea una denuncia anónima
