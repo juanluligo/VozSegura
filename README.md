@@ -119,14 +119,21 @@ Sistema web completo que permite:
 ### Página de Inicio
 <img width="1919" height="931" alt="image" src="https://github.com/user-attachments/assets/25c0ef79-d8de-4419-8003-6f0cc4fa2368" />
 
-### Dashboard Administrativo
-<img src="assets/screenshot-dashboard.png" alt="Dashboard" width="700px" />
+### Dashboard Usuario
+<img width="1919" height="929" alt="image" src="https://github.com/user-attachments/assets/35b7b420-1e2a-4ea6-b56b-249b1c86ceba" />
 
 ### Formulario de Denuncia
-<img src="assets/screenshot-denuncia.png" alt="Nueva Denuncia" width="700px" />
+<img width="1919" height="930" alt="image" src="https://github.com/user-attachments/assets/f6a00888-cac1-4443-91ca-f164b943dabe" />
+
+### Dashboard Administrativo
+<img width="1919" height="930" alt="image" src="https://github.com/user-attachments/assets/d30cf14a-1940-491b-81f4-77d4797772d5" />
+<img width="1919" height="931" alt="image" src="https://github.com/user-attachments/assets/cde2fedc-c60e-47bb-910b-b54ce3d950f0" />
 
 ### Seguimiento de Caso
-<img src="assets/screenshot-seguimiento.png" alt="Seguimiento" width="700px" />
+<img width="1919" height="925" alt="image" src="https://github.com/user-attachments/assets/43398d05-a266-474f-a659-7e3b34662c18" />
+<img width="1919" height="930" alt="image" src="https://github.com/user-attachments/assets/64254d5d-7995-4756-9f4b-5cb4a8c7a045" />
+
+
 
 </div>
 
