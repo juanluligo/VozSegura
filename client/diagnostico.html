@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Diagnóstico de Autenticación</title>
+    <style>
+        body { font-family: monospace; padding: 20px; }
+        .info { margin: 10px 0; padding: 10px; background: #f0f0f0; }
+        .error { background: #ffebee; }
+        .success { background: #e8f5e9; }
+    </style>
+</head>
+<body>
+    <h1>Diagnóstico de Autenticación</h1>
+    <div id="results"></div>
+    
+    <script>
+        const results = document.getElementById('results');
+        
+        function addResult(title, content, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `info ${type}`;
+            div.innerHTML = `<strong>${title}:</strong><br><pre>${JSON.stringify(content, null, 2)}</pre>`;
+            results.appendChild(div);
+        }
+        
+        // Verificar localStorage
+        const token = localStorage.getItem('token');
+        const usuarioStr = localStorage.getItem('usuario');
+        
+        addResult('Token en localStorage', token ? 'Existe (' + token.substring(0, 20) + '...)' : 'NO EXISTE', token ? 'success' : 'error');
+        
+        if (usuarioStr) {
+            try {
+                const usuario = JSON.parse(usuarioStr);
+                addResult('Usuario en localStorage', usuario, 'success');
+                addResult('Rol del usuario', usuario.rol || 'NO TIENE ROL', usuario.rol === 'admin' ? 'success' : 'error');
+            } catch (e) {
+                addResult('Error parseando usuario', e.message, 'error');
+            }
+        } else {
+            addResult('Usuario en localStorage', 'NO EXISTE', 'error');
+        }
+        
+        // Verificar si isAuthenticated funciona
+        const isAuth = !!localStorage.getItem('token');
+        addResult('isAuthenticated', isAuth, isAuth ? 'success' : 'error');
+    </script>
+</body>
+</html>
